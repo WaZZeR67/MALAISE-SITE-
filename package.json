@@ -1,0 +1,14 @@
+{
+  "name": "couverture-malaise-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site vitrine Couverture Malaise prepare pour Vercel.",
+  "scripts": {
+    "build": "node scripts/build-vercel.js",
+    "validate": "node work/validate-site.js"
+  },
+  "dependencies": {
+    "formidable": "^3.5.2",
+    "nodemailer": "^6.9.16"
+  }
+}

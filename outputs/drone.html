@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inspection toiture drone Bas-Rhin | Couverture Malaisé</title>
+  <meta name="description" content="Inspection de toiture par drone à Erstein et dans le Bas-Rhin. Photos HD, vidéos, relevés précis, modélisation 3D et diagnostic toiture par Couverture Malaisé, entreprise familiale fondée en 1976.">
+  <meta name="theme-color" content="#111111">
+  <style>
+    :root {
+      --black: #111111;
+      --orange: #ff6b00;
+      --orange-2: #ff8a2a;
+      --white: #ffffff;
+      --muted: rgba(255,255,255,.7);
+      --line: rgba(255,255,255,.14);
+      --radius: 8px;
+      --max: 1160px;
+      --shadow: 0 28px 90px rgba(0,0,0,.45);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--white);
+      background: var(--black);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.05; letter-spacing: 0; }
+    h1 { max-width: 840px; margin-bottom: 22px; font-size: clamp(46px, 7vw, 96px); font-weight: 950; }
+    h2 { max-width: 820px; margin-bottom: 18px; font-size: clamp(34px, 5vw, 62px); font-weight: 900; }
+    h3 { margin-bottom: 10px; font-size: 22px; }
+    .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .section { padding: 98px 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--orange-2);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 34px; height: 1px; background: var(--orange); }
+    .lead { max-width: 760px; color: rgba(255,255,255,.78); font-size: clamp(18px, 2vw, 24px); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      font-weight: 900;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: linear-gradient(135deg, var(--orange), var(--orange-2)); }
+    .btn.secondary { border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.08); }
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      background: rgba(17,17,17,.78);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+      gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 950; }
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--orange), rgba(255,107,0,.52));
+    }
+    .brand-logo {
+      display: block;
+      width: 76px;
+      height: 52px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      background: var(--white);
+      object-fit: contain;
+      padding: 4px;
+      box-shadow: 0 16px 38px rgba(0,0,0,.26);
+    }
+    .brand small { display: block; color: rgba(255,255,255,.62); font-size: 11px; }
+    .navlinks { display: flex; align-items: center; gap: 22px; color: rgba(255,255,255,.78); font-size: 14px; font-weight: 800; }
+    .hero {
+      min-height: 94vh;
+      padding: 170px 0 80px;
+      background:
+        linear-gradient(90deg, rgba(17,17,17,.96), rgba(17,17,17,.72) 45%, rgba(17,17,17,.28)),
+        linear-gradient(180deg, rgba(17,17,17,0), #111 92%),
+        url("https://images.pexels.com/photos/11748111/pexels-photo-11748111.jpeg?auto=compress&cs=tinysrgb&w=1800") center / cover;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+    .hero-proof {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 940px;
+      margin-top: 44px;
+    }
+    .proof-card, .card, .offer, .step {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.07);
+      box-shadow: var(--shadow);
+    }
+    .proof-card { min-height: 92px; padding: 18px; backdrop-filter: blur(12px); }
+    .proof-card strong { display: block; color: var(--orange-2); font-size: 22px; }
+    .proof-card span { color: rgba(255,255,255,.68); font-weight: 760; }
+    .split { display: grid; grid-template-columns: .9fr 1.1fr; gap: 42px; align-items: start; }
+    .offer {
+      padding: 30px;
+      border-color: rgba(255,107,0,.42);
+      background: linear-gradient(135deg, rgba(255,107,0,.18), rgba(255,255,255,.06));
+    }
+    .price { margin: 18px 0 8px; color: var(--white); font-size: clamp(42px, 6vw, 72px); line-height: 1; font-weight: 950; }
+    .price small { display: block; margin-top: 8px; color: rgba(255,255,255,.62); font-size: 13px; text-transform: uppercase; letter-spacing: .1em; }
+    .offer ul, .checklist { display: grid; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; }
+    .offer li, .checklist li { color: rgba(255,255,255,.76); font-weight: 760; }
+    .offer li::before, .checklist li::before { content: "✓"; margin-right: 9px; color: var(--orange-2); font-weight: 950; }
+    .grid { display: grid; gap: 18px; }
+    .deliverables { grid-template-columns: repeat(3, 1fr); margin-top: 34px; }
+    .card { min-height: 190px; padding: 24px; background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045)); }
+    .card span { display: grid; place-items: center; width: 46px; height: 46px; margin-bottom: 18px; border-radius: var(--radius); color: var(--orange); background: rgba(255,107,0,.14); font-weight: 950; }
+    .card p, .step p { color: rgba(255,255,255,.68); }
+    .process { background: #151515; }
+    .steps { grid-template-columns: repeat(4, 1fr); margin-top: 32px; }
+    .step { min-height: 180px; padding: 24px; }
+    .step b { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 18px; border-radius: 999px; background: var(--orange); }
+    .cta-band {
+      padding: 52px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255,107,0,.22), rgba(255,255,255,.06)),
+        #171717;
+      border: 1px solid rgba(255,107,0,.28);
+    }
+    .footer { padding: 42px 0; color: rgba(255,255,255,.62); background: #0b0b0b; }
+    @media (max-width: 900px) {
+      .navlinks { gap: 12px; font-size: 13px; }
+      .split, .hero-proof, .deliverables, .steps { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .container { width: calc(100% - 28px); }
+      .section { padding: 72px 0; }
+      .hero { padding: 130px 0 58px; }
+      .brand-logo { width: 58px; height: 42px; padding: 3px; }
+      .navlinks a:not(.btn) { display: none; }
+      .split, .hero-proof, .deliverables, .steps { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .cta-band { padding: 28px; }
+    }
+  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Inspection de toiture par drone",
+      "provider": {
+        "@type": "RoofingContractor",
+        "name": "Couverture Malaisé",
+        "logo": "assets/logo-malaise.jpg",
+        "image": "assets/logo-malaise.jpg",
+        "telephone": "+33388679220",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Erstein-Krafft",
+          "addressRegion": "Bas-Rhin",
+          "addressCountry": "FR"
+        }
+      },
+      "areaServed": ["Bas-Rhin", "Alsace"],
+      "description": "Inspection de toiture par drone avec photos HD, vidéos, relevés précis et modélisation 3D."
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="container nav">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo-malaise.jpg" alt="Logo Couverture Malaisé">
+        <span>Couverture Malaisé<small>Entreprise familiale fondée en 1976</small></span>
+      </a>
+      <div class="navlinks">
+        <a href="index.html#services">Services</a>
+        <a href="configurateur-faconnage.html">Façonnage</a>
+        <a href="index.html#realisations">Réalisations</a>
+        <a href="index.html#contact" class="btn primary">Devis gratuit</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Inspection toiture drone Bas-Rhin</p>
+        <h1>Voir l'état de votre toiture sans prendre de risque.</h1>
+        <p class="lead">Couverture Malaisé réalise des inspections drone précises pour identifier les défauts visibles, préparer un devis et documenter les zones difficiles d'accès.</p>
+        <div class="actions">
+          <a class="btn primary" href="index.html#contact">Demander une inspection drone</a>
+          <a class="btn secondary" href="tel:+33388679220">Appeler le 03 88 67 92 20</a>
+        </div>
+        <div class="hero-proof">
+          <div class="proof-card"><strong>Photos HD</strong><span>Détails de toiture</span></div>
+          <div class="proof-card"><strong>Vidéos</strong><span>Vue d'ensemble</span></div>
+          <div class="proof-card"><strong>3D</strong><span>Modélisation possible</span></div>
+          <div class="proof-card"><strong>120 €</strong><span>À partir de TTC</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">Offre diagnostic toiture</p>
+          <h2>Inspection drone complète</h2>
+          <p class="lead">Une offre claire pour obtenir une première vision fiable de votre toiture avant travaux, après intempéries ou en cas de suspicion de fuite.</p>
+          <ul class="checklist">
+            <li>Repérage des tuiles déplacées, solins, noues, faîtages et gouttières</li>
+            <li>Contrôle des zones hautes ou difficiles d'accès</li>
+            <li>Conseils pour prioriser les travaux nécessaires</li>
+          </ul>
+        </div>
+        <aside class="offer">
+          <p class="eyebrow">Prix d'appel</p>
+          <div class="price">120 €<small>à partir de TTC</small></div>
+          <ul>
+            <li>Photos HD des zones sensibles</li>
+            <li>Vidéo de contrôle</li>
+            <li>Compte-rendu visuel clair</li>
+            <li>Relevés précis selon accessibilité</li>
+          </ul>
+          <p style="margin:18px 0 0;color:rgba(255,255,255,.56);font-size:13px">Tarif indicatif selon distance, surface, urgence et complexité de la toiture.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section process">
+      <div class="container">
+        <p class="eyebrow">Livrables</p>
+        <h2>Ce que vous recevez après l'inspection.</h2>
+        <div class="deliverables grid">
+          <article class="card"><span>01</span><h3>Photos HD</h3><p>Des visuels exploitables pour repérer les défauts et comprendre l'état de la toiture.</p></article>
+          <article class="card"><span>02</span><h3>Vidéos de contrôle</h3><p>Une vue d'ensemble utile pour visualiser les accès, pentes et zones sensibles.</p></article>
+          <article class="card"><span>03</span><h3>Modélisation 3D</h3><p>Selon le besoin, une modélisation permet de mieux visualiser les volumes et mesures.</p></article>
+          <article class="card"><span>04</span><h3>Mesures précises</h3><p>Des relevés pour préparer plus efficacement le devis ou l'intervention.</p></article>
+          <article class="card"><span>05</span><h3>Compte-rendu clair</h3><p>Un retour lisible avec points repérés, niveau d'urgence et conseils.</p></article>
+          <article class="card"><span>06</span><h3>Sécurité</h3><p>Limiter les montées inutiles sur toiture et contrôler les zones risquées à distance.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Méthode</p>
+        <h2>Un diagnostic rapide, utile et exploitable.</h2>
+        <div class="steps grid">
+          <article class="step"><b>1</b><h3>Premier échange</h3><p>Vous expliquez la situation : fuite, doute, dégâts, achat, entretien ou préparation de travaux.</p></article>
+          <article class="step"><b>2</b><h3>Inspection drone</h3><p>Captation des zones visibles et points sensibles sans accès risqué à la toiture.</p></article>
+          <article class="step"><b>3</b><h3>Analyse</h3><p>Lecture des visuels, repérage des défauts et priorisation des interventions.</p></article>
+          <article class="step"><b>4</b><h3>Suite claire</h3><p>Devis, réparation, entretien ou contrôle complémentaire selon le diagnostic.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container cta-band">
+        <p class="eyebrow">Demande rapide</p>
+        <h2>Besoin de vérifier une toiture ?</h2>
+        <p class="lead">Envoyez votre demande avec la ville du chantier, le type de toiture et quelques photos si vous en avez.</p>
+        <div class="actions">
+          <a class="btn primary" href="index.html#contact">Remplir le formulaire</a>
+          <a class="btn secondary" href="tel:+33388679220">Appeler le 03 88 67 92 20</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© 2026 Couverture Malaisé - Inspection toiture drone Erstein, Bas-Rhin et Alsace.</div>
+  </footer>
+</body>
+</html>

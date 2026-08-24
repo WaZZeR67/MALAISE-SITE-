@@ -1,0 +1,3078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurateur façonnage sur mesure | Couverture Malaisé</title>
+  <meta name="description" content="Configurez simplement une pièce de zinguerie pliée sur mesure : couvertine, bavette, solin, rive, chéneau, costière. Demande de devis rapide en Bas-Rhin.">
+  <style>
+    :root {
+      --black: #111111;
+      --orange: #FF6B00;
+      --orange-2: #ff8a2a;
+      --white: #FFFFFF;
+      --muted: rgba(255,255,255,.68);
+      --line: rgba(255,255,255,.12);
+      --panel: rgba(255,255,255,.06);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--white);
+      background: var(--black);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(17,17,17,.82);
+      backdrop-filter: blur(18px);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; min-height: 78px; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; font-weight: 950; }
+    .brand-logo {
+      display: block;
+      width: 76px;
+      height: 52px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      background: var(--white);
+      object-fit: contain;
+      padding: 4px;
+      box-shadow: 0 16px 38px rgba(0,0,0,.26);
+    }
+    .brand small { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .navlinks { display: flex; align-items: center; gap: 22px; color: rgba(255,255,255,.78); font-size: 14px; font-weight: 800; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      color: var(--white);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(255,107,0,.18); }
+    .btn.primary { background: linear-gradient(135deg, var(--orange), var(--orange-2)); }
+    .btn.secondary { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.07); }
+    .btn.ghost { border-color: rgba(255,255,255,.16); background: transparent; }
+    .hero {
+      padding: 92px 0 38px;
+      background:
+        radial-gradient(circle at 78% 12%, rgba(255,107,0,.18), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 920px; margin-bottom: 18px; font-size: clamp(42px, 7vw, 88px); line-height: .96; letter-spacing: 0; }
+    h2 { margin-bottom: 18px; font-size: clamp(30px, 4vw, 54px); line-height: 1; letter-spacing: 0; }
+    h3 { margin-bottom: 10px; font-size: 20px; }
+    .lead { max-width: 760px; color: rgba(255,255,255,.78); font-size: clamp(18px, 2vw, 22px); line-height: 1.62; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 28px 0 0;
+    }
+    .progress span {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.05);
+      font-size: 13px;
+      font-weight: 850;
+      text-align: center;
+      padding: 0 10px;
+    }
+    .progress span.active { color: var(--white); border-color: rgba(255,107,0,.55); background: rgba(255,107,0,.16); }
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .mode-card {
+      min-height: 230px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.06);
+      padding: 24px;
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+      box-shadow: 0 22px 55px rgba(0,0,0,.18);
+    }
+    .mode-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 24px;
+    }
+    .mode-card p {
+      color: rgba(255,255,255,.68);
+      line-height: 1.55;
+    }
+    .mode-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .is-hidden { display: none !important; }
+    .draw-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+    .draw-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .advanced-tools {
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      padding: 10px;
+    }
+    .advanced-tools summary {
+      cursor: pointer;
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      font-weight: 900;
+      list-style: none;
+    }
+    .advanced-tools summary::-webkit-details-marker { display: none; }
+    .advanced-tools .draw-toolbar {
+      margin: 12px 0 0;
+    }
+    .advanced-draw-tool { display: none !important; }
+    .advanced-draw-tool.is-visible { display: inline-flex !important; }
+    select.advanced-draw-tool.is-visible { display: inline-block !important; }
+    .tool-btn, .tool-select {
+      min-height: 42px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: rgba(255,255,255,.07);
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .tool-btn.active {
+      border-color: rgba(255,107,0,.72);
+      background: rgba(255,107,0,.18);
+    }
+    .draw-stage {
+      position: relative;
+      min-height: 540px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      background: #f7f7f7;
+      overflow: hidden;
+    }
+    .draw-stage:fullscreen {
+      background: #111;
+      padding: 18px;
+    }
+    #profileCanvas {
+      display: block;
+      width: 100%;
+      height: 540px;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 25 25'%3E%3Cpath d='M12.5 1v23M1 12.5h23' stroke='%23000' stroke-width='1.6' stroke-linecap='round'/%3E%3Ccircle cx='12.5' cy='12.5' r='2.2' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") 12 12, crosshair;
+      touch-action: none;
+      background: #fbfbfb;
+    }
+    .draw-help {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      max-width: calc(100% - 32px);
+      border: 1px solid rgba(17,17,17,.08);
+      border-radius: var(--radius);
+      color: rgba(17,17,17,.72);
+      background: rgba(255,255,255,.88);
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 750;
+      pointer-events: none;
+    }
+    .draw-side {
+      display: grid;
+      gap: 14px;
+    }
+    .draw-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .draw-stat {
+      border: 1px solid rgba(255,107,0,.24);
+      border-radius: var(--radius);
+      background: rgba(255,107,0,.1);
+      padding: 14px;
+    }
+    .draw-stat span {
+      display: block;
+      color: rgba(255,255,255,.62);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .draw-stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 24px;
+    }
+    .segment-list {
+      display: grid;
+      gap: 8px;
+      max-height: 210px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .segment-list button {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: rgba(255,255,255,.06);
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .segment-list .measure-row {
+      display: grid;
+      grid-template-columns: minmax(96px, 1fr) 118px;
+      gap: 8px;
+      align-items: center;
+    }
+    .segment-list .measure-row button {
+      min-height: 44px;
+    }
+    .segment-list .measure-row input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: rgba(255,255,255,.08);
+      padding: 9px 34px 9px 10px;
+      font: inherit;
+      font-weight: 850;
+      text-align: right;
+      outline: none;
+    }
+    .segment-list .measure-row input:focus {
+      border-color: rgba(255,107,0,.85);
+      box-shadow: 0 0 0 3px rgba(255,107,0,.14);
+      background: rgba(255,107,0,.12);
+    }
+    .segment-list .measure-field {
+      position: relative;
+      display: block;
+    }
+    .segment-list .measure-field em {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 900;
+      pointer-events: none;
+    }
+    .segment-list .measure-row.active input {
+      border-color: rgba(255,107,0,.72);
+    }
+    .segment-list button.active {
+      border-color: rgba(255,107,0,.78);
+      background: rgba(255,107,0,.18);
+      box-shadow: 0 0 0 3px rgba(255,107,0,.1);
+    }
+    .segment-list .list-title {
+      margin: 10px 0 2px;
+      color: rgba(255,255,255,.58);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .draw-alert {
+      display: none;
+      border: 1px solid rgba(255,59,48,.34);
+      border-radius: var(--radius);
+      color: #ffd7d4;
+      background: rgba(255,59,48,.12);
+      padding: 12px;
+      line-height: 1.45;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    .draw-alert.show { display: block; }
+    .section { padding: 70px 0; }
+    .section.soft { background: #151515; }
+    .section.light { color: #111; background: #fff; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 26px; }
+    .section-head p { max-width: 620px; margin: 0; color: rgba(255,255,255,.68); line-height: 1.6; }
+    .light .section-head p { color: rgba(17,17,17,.65); }
+    .piece-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .piece-card {
+      display: grid;
+      gap: 16px;
+      min-height: 260px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      padding: 22px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .piece-card:hover, .piece-card.selected { transform: translateY(-4px); border-color: rgba(255,107,0,.6); background: rgba(255,107,0,.12); }
+    .piece-drawing {
+      display: grid;
+      place-items: center;
+      min-height: 100px;
+      border-radius: var(--radius);
+      background: rgba(17,17,17,.54);
+    }
+    .piece-drawing svg { width: 132px; height: 76px; }
+    .piece-card p { margin: 0; color: rgba(255,255,255,.68); line-height: 1.55; }
+    .choice-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; }
+    .choice-row strong { color: var(--orange); }
+    .workbench {
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 24px;
+    }
+    .diagram-wrap {
+      display: grid;
+      gap: 18px;
+      min-height: 100%;
+    }
+    .diagram {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 360px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px),
+        #101010;
+      background-size: 24px 24px;
+      overflow: hidden;
+    }
+    .diagram svg { width: min(92%, 560px); height: auto; }
+    .diagram svg.dim-updated { animation: dimPulse .28s ease; }
+    @keyframes dimPulse {
+      0% { filter: drop-shadow(0 0 0 rgba(255,107,0,0)); transform: scale(1); }
+      45% { filter: drop-shadow(0 0 18px rgba(255,107,0,.45)); transform: scale(1.012); }
+      100% { filter: drop-shadow(0 0 0 rgba(255,107,0,0)); transform: scale(1); }
+    }
+    .dim-click {
+      border: 0;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--orange);
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(255,107,0,.22);
+    }
+    .dim-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 34px;
+      border: 1px solid rgba(255,107,0,.45);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: rgba(17,17,17,.92);
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(0,0,0,.26);
+      white-space: nowrap;
+    }
+    .dim-chip span {
+      color: var(--orange);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .angle-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      color: rgba(255,255,255,.9);
+      background: rgba(17,17,17,.76);
+      padding: 0 9px;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .dim-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .angle-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .angle-row-title {
+      margin: 18px 0 0;
+      color: rgba(255,255,255,.74);
+      font-size: 12px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .dim-warning {
+      display: none;
+      border: 1px solid rgba(255,59,48,.36);
+      border-radius: var(--radius);
+      background: rgba(255,59,48,.1);
+      color: #ffd7d7;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .dim-warning.show { display: block; }
+    .field { display: grid; gap: 8px; }
+    .field label { color: rgba(255,255,255,.72); font-size: 13px; font-weight: 850; }
+    .light .field label { color: rgba(17,17,17,.7); }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: rgba(17,17,17,.72);
+      outline: none;
+      padding: 0 14px;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .light .field input, .light .field select, .light .field textarea {
+      color: #111;
+      border-color: rgba(17,17,17,.13);
+      background: #f7f7f7;
+    }
+    .field textarea { min-height: 130px; padding-top: 14px; resize: vertical; }
+    .field input[type="file"] { padding: 14px; cursor: pointer; }
+    .field input[type="file"]::file-selector-button {
+      margin-right: 12px;
+      border: 0;
+      border-radius: var(--radius);
+      color: var(--white);
+      background: var(--orange);
+      padding: 9px 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255,107,0,.14); }
+    .field.is-invalid label { color: #ff9b9b; }
+    .field.is-invalid input {
+      border-color: #ff3b30;
+      box-shadow: 0 0 0 4px rgba(255,59,48,.16);
+    }
+    .config-form.was-submitted .field.is-invalid label { color: #ff4d4d; }
+    .config-form.was-submitted .field.is-invalid input, .config-form.was-submitted .field.is-invalid textarea {
+      border-color: #ff3b30;
+      box-shadow: 0 0 0 4px rgba(255,59,48,.16);
+    }
+    .settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .calc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+    .calc-card {
+      border: 1px solid rgba(255,107,0,.24);
+      border-radius: var(--radius);
+      background: rgba(255,107,0,.1);
+      padding: 18px;
+    }
+    .calc-card span { display: block; color: rgba(255,255,255,.62); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+    .calc-card strong { display: block; margin-top: 8px; font-size: 28px; }
+    .notice { margin-top: 14px; color: rgba(255,255,255,.6); font-size: 13px; line-height: 1.5; }
+    .viewer-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 24px; align-items: stretch; }
+    .viewer {
+      position: relative;
+      min-height: 470px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+      background: radial-gradient(circle at 30% 20%, rgba(255,107,0,.16), transparent 26%), #0d0d0d;
+      overflow: hidden;
+    }
+    #threeStage { width: 100%; height: 100%; min-height: 470px; }
+    .viewer-actions {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+    }
+    .viewer-actions button {
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px;
+      background: rgba(17,17,17,.78);
+      color: var(--white);
+      padding: 9px 12px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .viewer-message {
+      display: none;
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      right: 150px;
+      z-index: 2;
+      border: 1px solid rgba(255,107,0,.34);
+      border-radius: 8px;
+      background: rgba(17,17,17,.86);
+      color: rgba(255,255,255,.82);
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .viewer-message.show { display: block; }
+    .viewer-note {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      right: 16px;
+      color: rgba(255,255,255,.66);
+      font-size: 12px;
+      pointer-events: none;
+    }
+    .upload-grid { display: grid; gap: 16px; }
+    .client-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .full { grid-column: 1 / -1; }
+    .submit-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .status {
+      display: none;
+      margin-top: 14px;
+      border: 1px solid rgba(255,107,0,.26);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: rgba(255,107,0,.12);
+      padding: 14px 16px;
+      line-height: 1.45;
+    }
+    .status.show { display: block; }
+    .footer { padding: 42px 0; color: rgba(255,255,255,.62); background: #0b0b0b; }
+    .footer .container { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    @media (max-width: 980px) {
+      .piece-grid, .workbench, .viewer-grid, .draw-layout, .mode-grid { grid-template-columns: 1fr; }
+      .progress { grid-template-columns: repeat(2, 1fr); }
+      .navlinks a:not(.btn) { display: none; }
+    }
+    @media (max-width: 640px) {
+      .container { width: calc(100% - 28px); }
+      .hero { padding: 64px 0 30px; }
+      .brand-logo { width: 58px; height: 42px; padding: 3px; }
+      .brand > span:last-child { max-width: 180px; overflow: hidden; }
+      .piece-grid, .settings-grid, .calc-grid, .dim-row, .angle-row, .client-grid, .draw-summary-grid { grid-template-columns: 1fr; }
+      .section { padding: 48px 0; }
+      .section-head { align-items: start; flex-direction: column; }
+      .diagram { min-height: 300px; }
+      .viewer, #threeStage { min-height: 360px; }
+      .draw-stage { min-height: 420px; }
+      #profileCanvas { height: 420px; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="container nav" aria-label="Navigation configurateur">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo-malaise.jpg" alt="Logo Couverture Malaisé">
+        <span>Couverture Malaisé<small>Façonnage de zinguerie sur mesure</small></span>
+      </a>
+      <div class="navlinks">
+        <a href="index.html#services">Services</a>
+        <a href="drone.html">Drone</a>
+        <a class="btn primary" href="tel:+33388679220">03 88 67 92 20</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Configurateur façonnage</p>
+        <h1>Votre pièce pliée sur mesure, expliquée simplement.</h1>
+        <p class="lead">Choisissez une pièce, indiquez quelques dimensions, visualisez le résultat et envoyez une demande de devis exploitable. Pas besoin de connaître le vocabulaire de la zinguerie.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#mode-faconnage">Commencer la demande</a>
+          <a class="btn secondary" href="index.html">Retour au site</a>
+        </div>
+        <div class="progress" aria-label="Progression">
+          <span class="active">1. Dessiner ou choisir</span>
+          <span>2. Régler les cotes</span>
+          <span>3. Vérifier le rendu</span>
+          <span>4. Envoyer la demande</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="mode-faconnage">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Démarrage simple</p>
+            <h2>Comment voulez-vous préparer votre pièce ?</h2>
+          </div>
+          <p>Choisissez une pièce standard si vous avez une forme classique. Choisissez le dessin sur mesure uniquement si votre profil est particulier.</p>
+        </div>
+        <div class="mode-grid">
+          <article class="mode-card">
+            <div>
+              <strong>Pièce standard</strong>
+              <p>Le plus simple : couvertine, bavette, solin, chêneau, rive, costière ou noue. Vous modifiez seulement les mesures.</p>
+            </div>
+            <div class="mode-actions">
+              <button class="btn primary" type="button" data-config-mode="standard">Choisir une pièce</button>
+            </div>
+          </article>
+          <article class="mode-card">
+            <div>
+              <strong>Pièce sur mesure</strong>
+              <p>Pour un profil spécial : dessinez votre forme ou ajoutez simplement une photo, un plan ou un croquis.</p>
+            </div>
+            <div class="mode-actions">
+              <button class="btn secondary" type="button" data-config-mode="custom">Dessiner ma pièce</button>
+              <a class="btn ghost" href="#apercu">Je ne connais pas les mesures</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft custom-drawing is-hidden" id="dessin-libre">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Dessin libre 2D</p>
+            <h2>Dessinez votre profil avec une règle.</h2>
+          </div>
+          <p>Cliquez pour poser un point, cliquez une deuxième fois pour créer une ligne. Les longueurs et les angles peuvent être modifiés en cliquant directement dessus.</p>
+        </div>
+        <div class="draw-layout">
+          <div class="panel">
+            <div class="draw-toolbar" aria-label="Outils de dessin">
+              <button class="tool-btn active" type="button" id="drawMode">Dessiner ma pièce</button>
+              <button class="tool-btn" type="button" id="sketchMode">Transformer mon croquis</button>
+              <button class="tool-btn" type="button" id="moveMode">Déplacer</button>
+              <button class="tool-btn" type="button" id="mergeMode">Fusionner</button>
+              <select class="tool-select" id="lockMode" aria-label="Verrouillage angle">
+                <option value="free">Angle libre</option>
+                <option value="h">Horizontal</option>
+                <option value="v">Vertical</option>
+                <option value="45">45°</option>
+                <option value="90">90°</option>
+              </select>
+              <select class="tool-select" id="snapTolerance" aria-label="Tolérance d'accrochage">
+                <option value="5">Snap 5 px précis</option>
+                <option value="10" selected>Snap 10 px normal</option>
+                <option value="20">Snap 20 px facile</option>
+              </select>
+              <button class="tool-btn" type="button" id="undoDraw">Annuler</button>
+              <button class="tool-btn" type="button" id="redoDraw">Rétablir</button>
+              <button class="tool-btn" type="button" id="correctSketch">Nettoyer le croquis</button>
+              <button class="tool-btn" type="button" id="editDimensions">Régler les mesures</button>
+              <button class="tool-btn" type="button" id="generate3D">Voir l’aperçu 3D</button>
+              <button class="tool-btn" type="button" id="resetDraw">Effacer le dessin</button>
+              <button class="tool-btn" type="button" id="advancedDrawToggle" aria-expanded="false">Options avancées</button>
+              <button class="tool-btn" type="button" id="deleteSegment">Supprimer segment</button>
+              <button class="tool-btn" type="button" id="duplicateDraw">Dupliquer</button>
+              <button class="tool-btn" type="button" id="closeShape">Fermer</button>
+              <button class="tool-btn" type="button" id="zoomIn">Zoom +</button>
+              <button class="tool-btn" type="button" id="zoomOut">Zoom -</button>
+              <button class="tool-btn" type="button" id="panLeft">←</button>
+              <button class="tool-btn" type="button" id="panUp">↑</button>
+              <button class="tool-btn" type="button" id="panDown">↓</button>
+              <button class="tool-btn" type="button" id="panRight">→</button>
+              <button class="tool-btn" type="button" id="resetView">Vue initiale</button>
+              <button class="tool-btn" type="button" id="fullScreenDraw">Plein écran</button>
+              <button class="tool-btn" type="button" id="exportPdfDraw">Exporter PDF</button>
+              <a class="tool-btn" href="#demande" style="display:inline-flex;align-items:center;text-decoration:none">Envoyer la demande</a>
+            </div>
+            <div class="draw-stage" id="drawStage">
+              <svg id="profileCanvas" viewBox="0 0 900 460" role="img" aria-label="Éditeur de dessin 2D"></svg>
+              <div class="draw-help" id="drawHelp">Cliquez pour commencer le dessin. Le point se pose exactement au centre de la croix.</div>
+            </div>
+          </div>
+          <aside class="panel draw-side">
+            <h3>Résumé du dessin</h3>
+            <div class="draw-summary-grid">
+              <div class="draw-stat"><span>Développé</span><strong id="freeDeveloped">0 mm</strong></div>
+              <div class="draw-stat"><span>Plis</span><strong id="freeFolds">0</strong></div>
+              <div class="draw-stat"><span>Segments</span><strong id="freeSegments">0</strong></div>
+              <div class="draw-stat"><span>Surface</span><strong id="freeSurface">0,00 m²</strong></div>
+            </div>
+            <div class="draw-alert" id="drawAlert"></div>
+            <p class="notice">Tapez directement vos longueurs en mm et vos angles en degrés dans les champs. Les valeurs restent indicatives pour préparer le devis.</p>
+            <div class="segment-list" id="segmentList"></div>
+            <a class="btn primary" href="#demande">Envoyer ma demande</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="choix-piece">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Étape 1</p>
+            <h2>Choisissez la pièce à fabriquer.</h2>
+          </div>
+          <p>Les formes sont volontairement simples. Si votre pièce est particulière, choisissez “Pièce personnalisée” et ajoutez un croquis ou une photo.</p>
+        </div>
+        <div class="piece-grid" id="pieceGrid"></div>
+      </div>
+    </section>
+
+    <section class="section soft" id="dimensions">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Étapes 2 à 4</p>
+            <h2>Dimensions et paramètres.</h2>
+          </div>
+          <p>Cliquez sur les lettres du dessin, puis indiquez les mesures en millimètres. Les calculs se mettent à jour automatiquement.</p>
+        </div>
+        <div class="workbench">
+          <div class="panel diagram-wrap">
+            <h3 id="selectedTitle">Couvertine</h3>
+            <div class="diagram">
+              <svg id="dimensionSvg" viewBox="0 0 620 360" role="img" aria-label="Schéma coté de la pièce"></svg>
+            </div>
+            <div class="dim-row">
+              <div class="field"><label for="dimA">A - largeur dessus</label><input id="dimA" type="number" min="20" max="1250" step="1" value="210"></div>
+              <div class="field"><label for="dimB">B - retombée gauche</label><input id="dimB" type="number" min="10" max="600" step="1" value="35"></div>
+              <div class="field"><label for="dimC">C - retombée droite</label><input id="dimC" type="number" min="10" max="600" step="1" value="35"></div>
+              <div class="field"><label for="dimD">D - retour bas</label><input id="dimD" type="number" min="0" max="250" step="1" value="10"></div>
+            </div>
+            <div class="angle-row-title">Angles de pliage</div>
+            <div class="angle-row" id="standardAngleFields">
+              <div class="field"><label for="stdAngle1">Angle 1</label><input id="stdAngle1" type="number" min="1" max="179" step="1" value="45"></div>
+              <div class="field"><label for="stdAngle2">Angle 2</label><input id="stdAngle2" type="number" min="1" max="179" step="1" value="90"></div>
+              <div class="field"><label for="stdAngle3">Angle 3</label><input id="stdAngle3" type="number" min="1" max="179" step="1" value="90"></div>
+              <div class="field"><label for="stdAngle4">Angle 4</label><input id="stdAngle4" type="number" min="1" max="179" step="1" value="45"></div>
+            </div>
+            <div class="dim-warning" id="dimWarning"></div>
+          </div>
+          <div class="panel">
+            <h3>Paramètres de fabrication</h3>
+            <div class="settings-grid">
+              <div class="field"><label for="material">Matière</label><select id="material"><option>Zinc</option><option>Aluminium</option><option>Acier galvanisé</option><option>Acier laqué</option><option>Cuivre</option></select></div>
+              <div class="field"><label for="thickness">Épaisseur</label><select id="thickness"><option value="0.75">0,75 mm</option><option value="0.80">0,80 mm</option><option value="1">1 mm</option><option value="1.5">1,5 mm</option></select></div>
+              <div class="field"><label for="color">Couleur</label><select id="color"><option>Blanc</option><option selected>Anthracite</option><option>Noir</option><option>Brun</option><option>Gris</option><option>Autre</option></select></div>
+              <div class="field"><label for="lengthTotal">Longueur totale en mètres</label><input id="lengthTotal" type="number" min="0.1" step="0.1" value="2"></div>
+              <div class="field"><label for="quantity">Quantité de pièces</label><input id="quantity" type="number" min="1" step="1" value="2"></div>
+            </div>
+            <div class="calc-grid">
+              <div class="calc-card"><span>Développé</span><strong id="calcDeveloped">400 mm</strong></div>
+              <div class="calc-card"><span>Surface</span><strong id="calcSurface">2,40 m²</strong></div>
+              <div class="calc-card"><span>Poids</span><strong id="calcWeight">12,85 kg</strong></div>
+            </div>
+            <p class="notice">Ces calculs sont indicatifs. Le devis final tient compte des détails de pose, des finitions, des contraintes de pliage et de la matière disponible.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="apercu">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Étapes 5 et 6</p>
+            <h2>Aperçu simple et fichiers utiles.</h2>
+          </div>
+          <p>La vue 3D sert à comprendre la forme générale. Vous pouvez ajouter une photo, un croquis papier, un plan ou un PDF.</p>
+        </div>
+        <div class="viewer-grid">
+          <div class="viewer">
+            <div class="viewer-actions"><button type="button" id="reset3DView">Réinitialiser vue</button></div>
+            <div class="viewer-message" id="viewerMessage"></div>
+            <div id="threeStage"></div>
+            <p class="viewer-note">Souris ou doigt : rotation, zoom et déplacement. Aperçu indicatif, non contractuel.</p>
+          </div>
+          <div class="panel upload-grid">
+            <h3>Ajouter vos documents</h3>
+            <div class="field"><label for="attachments">Photo, croquis, PDF ou plan</label><input id="attachments" type="file" name="Fichiers joints" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" multiple></div>
+            <p class="notice">Formats acceptés : JPG, PNG, PDF. Si vous avez un doute, ajoutez simplement une photo ou un croquis à main levée.</p>
+            <button class="btn secondary" type="button" id="downloadPdf">Générer le PDF récapitulatif</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section light" id="demande">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Étapes 7 à 9</p>
+            <h2>Envoyer la demande de devis.</h2>
+          </div>
+          <p>Le configurateur prépare automatiquement un récapitulatif clair avec la pièce, les dimensions, les paramètres et les coordonnées client.</p>
+        </div>
+        <form class="config-form" name="demande-faconnage" method="POST" action="/api/demande" enctype="multipart/form-data" novalidate>
+          <input type="hidden" name="form-name" value="demande-faconnage">
+          <input type="hidden" id="summaryField" name="Récapitulatif configurateur">
+          <p style="display:none"><label>Ne pas remplir <input name="bot-field"></label></p>
+          <div class="client-grid">
+            <div class="field"><label for="clientName">Nom</label><input id="clientName" name="Nom" autocomplete="name" required></div>
+            <div class="field"><label for="company">Société</label><input id="company" name="Société" autocomplete="organization"></div>
+            <div class="field"><label for="phone">Téléphone</label><input id="phone" name="Téléphone" autocomplete="tel" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" type="email" name="Email" autocomplete="email" required></div>
+            <div class="field full"><label for="address">Adresse</label><input id="address" name="Adresse" autocomplete="street-address" required></div>
+            <div class="field full"><label for="comment">Commentaire</label><textarea id="comment" name="Commentaire" placeholder="Exemple : pose sur muret, couleur à confirmer, chantier à Erstein..."></textarea></div>
+          </div>
+          <div class="submit-row">
+            <button class="btn primary" type="submit">Envoyer ma demande de devis</button>
+            <button class="btn ghost" type="button" id="copySummary">Copier le récapitulatif</button>
+          </div>
+          <div class="status" id="formStatus"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <span>Couverture Malaisé - Façonnage sur mesure en Bas-Rhin</span>
+      <a href="mailto:toiture@malaise.fr">toiture@malaise.fr</a>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    const pieces = [
+      { id: 'couvertine', name: 'Couvertine', desc: 'Protection de dessus de mur ou acrotère avec retombées.', dims: [210, 35, 35, 10], returns: 2, length: 2, icon: 'cover' },
+      { id: 'bavette', name: 'Bavette', desc: 'Pièce de rejet d’eau pour protéger une jonction.', dims: [250, 40, 25, 10], returns: 1, icon: 'bavette' },
+      { id: 'solin', name: 'Solin', desc: 'Finition contre mur pour sécuriser une étanchéité.', dims: [180, 60, 30, 10], returns: 1, icon: 'solin' },
+      { id: 'rive', name: 'Habillage de rive', desc: 'Finition propre sur le côté d’une toiture.', dims: [220, 45, 45, 10], returns: 1, icon: 'rive' },
+      { id: 'noue', name: 'Noue en V', desc: 'Pièce de récupération des eaux entre deux pans de toiture.', dims: [400, 90, 90, 0], returns: 0, icon: 'noue' },
+      { id: 'cheneau', name: 'Chéneau', desc: 'Canal d’évacuation des eaux pluviales sur mesure.', dims: [360, 90, 90, 10], returns: 2, icon: 'cheneau' },
+      { id: 'bande-rive', name: 'Bande de rive', desc: 'Bande pliée de finition pour bord de toiture.', dims: [200, 35, 35, 10], returns: 1, icon: 'bande-rive' },
+      { id: 'costiere', name: 'Costière', desc: 'Relevé ou cadre métallique pour toiture terrasse.', dims: [260, 80, 80, 0], returns: 0, icon: 'costiere' },
+      { id: 'personnalisee', name: 'Pièce personnalisée', desc: 'Pour une forme particulière avec croquis ou photo.', dims: [250, 50, 50, 0], returns: 0, icon: 'custom' }
+    ];
+    const density = { 'Zinc': 7140, 'Aluminium': 2700, 'Acier galvanisé': 7850, 'Acier laqué': 7850, 'Cuivre': 8960 };
+    const colorMap = { Blanc: 0xf4f4f4, Anthracite: 0x30343a, Noir: 0x111111, Brun: 0x5b3a2e, Gris: 0x8e8e8e, Autre: 0xff6b00 };
+    const material3DColors = { Zinc: 0xb7bcc0, Aluminium: 0xd9dde0, 'Acier galvanisé': 0x9da4aa, 'Acier laqué': 0x30343a, Cuivre: 0xb87333 };
+    const state = { piece: pieces[0], dims: { A: 210, B: 35, C: 35, D: 10 }, angles: [45, 90, 90, 45] };
+    const $ = (id) => document.getElementById(id);
+    const drawState = {
+      points: [],
+      preview: null,
+      history: [],
+      future: [],
+      snap: 1,
+      maxDeveloped: 1250,
+      viewBox: { x: 0, y: 0, w: 900, h: 460 },
+      activeType: null,
+      activeIndex: null,
+      tool: 'draw',
+      activePointIndex: null,
+      draggingPointIndex: null,
+      mergePointIndex: null,
+      hoveredPointIndex: null,
+      cursorPoint: null,
+      sketchPoints: [],
+      lastSketchPoints: [],
+      sketchDrawing: false,
+      sketchJustFinished: false,
+      lockReferenceList: false
+    };
+
+    function clonePoints(points = drawState.points) {
+      return points.map((point) => ({ x: point.x, y: point.y, breakBefore: Boolean(point.breakBefore) }));
+    }
+
+    function pushDrawHistory() {
+      drawState.history.push(clonePoints());
+      if (drawState.history.length > 40) drawState.history.shift();
+      drawState.future = [];
+    }
+
+    function saveDrawing() {
+      try {
+        localStorage.setItem('malaise-faconnage-dessin-v1', JSON.stringify(drawState.points));
+      } catch (error) {
+        // Le dessin reste utilisable même si le navigateur bloque le stockage local.
+      }
+    }
+
+    function restoreDrawing() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('malaise-faconnage-dessin-v1') || '[]');
+        if (Array.isArray(saved)) drawState.points = saved
+          .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y))
+          .map((point, index) => ({ x: point.x, y: point.y, breakBefore: index > 0 && Boolean(point.breakBefore) }));
+      } catch (error) {
+        drawState.points = [];
+      }
+    }
+
+    function setCanvasViewBox() {
+      const box = drawState.viewBox;
+      $('profileCanvas').setAttribute('viewBox', `${box.x} ${box.y} ${box.w} ${box.h}`);
+    }
+
+    function snapValue(value) {
+      return Math.round(value / drawState.snap) * drawState.snap;
+    }
+
+    function snapPoint(point) {
+      return { x: snapValue(point.x), y: snapValue(point.y) };
+    }
+
+    function getCanvasPoint(event) {
+      const svg = $('profileCanvas');
+      const rect = svg.getBoundingClientRect();
+      const box = drawState.viewBox;
+      return snapPoint({
+        x: box.x + ((event.clientX - rect.left) / rect.width) * box.w,
+        y: box.y + ((event.clientY - rect.top) / rect.height) * box.h
+      });
+    }
+
+    function getRawCanvasPoint(event) {
+      const svg = $('profileCanvas');
+      const rect = svg.getBoundingClientRect();
+      const box = drawState.viewBox;
+      return {
+        x: box.x + ((event.clientX - rect.left) / rect.width) * box.w,
+        y: box.y + ((event.clientY - rect.top) / rect.height) * box.h
+      };
+    }
+
+    function canvasToScreen(point) {
+      const svg = $('profileCanvas');
+      const rect = svg.getBoundingClientRect();
+      const box = drawState.viewBox;
+      return {
+        x: rect.left + ((point.x - box.x) / box.w) * rect.width,
+        y: rect.top + ((point.y - box.y) / box.h) * rect.height
+      };
+    }
+
+    function pointSnapTolerance() {
+      return Math.max(5, Number($('snapTolerance')?.value) || 10);
+    }
+
+    function findPointNearEvent(event) {
+      const tolerance = pointSnapTolerance();
+      let best = null;
+      drawState.points.forEach((point, index) => {
+        const screen = canvasToScreen(point);
+        const dist = Math.hypot(screen.x - event.clientX, screen.y - event.clientY);
+        if (dist <= tolerance && (!best || dist < best.dist)) best = { index, point, dist };
+      });
+      return best;
+    }
+
+    function pointForDrawingEvent(event) {
+      const snap = findPointNearEvent(event);
+      if (snap) return { point: { x: snap.point.x, y: snap.point.y }, snapIndex: snap.index };
+      return { point: getCanvasPoint(event), snapIndex: null };
+    }
+
+    function pointSnapCanvasTolerance() {
+      const svg = $('profileCanvas');
+      const rect = svg.getBoundingClientRect();
+      return pointSnapTolerance() * (drawState.viewBox.w / Math.max(1, rect.width));
+    }
+
+    function findPointNearCanvasPoint(point) {
+      const tolerance = pointSnapCanvasTolerance();
+      let best = null;
+      drawState.points.forEach((existing, index) => {
+        const dist = distance(existing, point);
+        if (dist <= tolerance && (!best || dist < best.dist)) best = { index, point: existing, dist };
+      });
+      return best;
+    }
+
+    function perpendicularDistance(point, lineStart, lineEnd) {
+      const lineLength = distance(lineStart, lineEnd);
+      if (!lineLength) return distance(point, lineStart);
+      return Math.abs((lineEnd.y - lineStart.y) * point.x - (lineEnd.x - lineStart.x) * point.y + lineEnd.x * lineStart.y - lineEnd.y * lineStart.x) / lineLength;
+    }
+
+    function simplifySketch(points, epsilon = 14) {
+      if (points.length <= 2) return points.slice();
+      let maxDistance = 0;
+      let index = 0;
+      for (let i = 1; i < points.length - 1; i += 1) {
+        const currentDistance = perpendicularDistance(points[i], points[0], points[points.length - 1]);
+        if (currentDistance > maxDistance) {
+          index = i;
+          maxDistance = currentDistance;
+        }
+      }
+      if (maxDistance > epsilon) {
+        const left = simplifySketch(points.slice(0, index + 1), epsilon);
+        const right = simplifySketch(points.slice(index), epsilon);
+        return left.slice(0, -1).concat(right);
+      }
+      return [points[0], points[points.length - 1]];
+    }
+
+    function straightenSketch(points) {
+      if (points.length < 2) return points;
+      const result = [{ x: snapValue(points[0].x), y: snapValue(points[0].y), breakBefore: false }];
+      for (let i = 1; i < points.length; i += 1) {
+        const previous = result[result.length - 1];
+        const raw = { x: snapValue(points[i].x), y: snapValue(points[i].y), breakBefore: false };
+        const dx = raw.x - previous.x;
+        const dy = raw.y - previous.y;
+        const len = Math.hypot(dx, dy);
+        if (len < drawState.snap) continue;
+        let angle = Math.atan2(dy, dx);
+        const snapAngles = [0, Math.PI / 4, Math.PI / 2, 3 * Math.PI / 4, Math.PI, -3 * Math.PI / 4, -Math.PI / 2, -Math.PI / 4];
+        const nearest = snapAngles.reduce((best, candidate) => Math.abs(candidate - angle) < Math.abs(best - angle) ? candidate : best, snapAngles[0]);
+        if (Math.abs(nearest - angle) < 12 * Math.PI / 180) angle = nearest;
+        result.push({ x: previous.x + Math.cos(angle) * len, y: previous.y + Math.sin(angle) * len, breakBefore: false });
+      }
+      return cleanProfilePoints(result);
+    }
+
+    function correctSketchToProfile() {
+      const sourceSketch = drawState.sketchPoints.length >= drawState.lastSketchPoints.length
+        ? drawState.sketchPoints
+        : drawState.lastSketchPoints;
+      if (sourceSketch.length < 2) {
+        const alert = $('drawAlert');
+        alert.textContent = 'Dessinez d’abord un croquis à main levée avant de le corriger.';
+        alert.classList.add('show');
+        return;
+      }
+      const simplified = simplifySketch(sourceSketch, 14);
+      const corrected = straightenSketch(simplified);
+      if (profileSegments(corrected).length < 1) {
+        const alert = $('drawAlert');
+        alert.textContent = 'Le croquis est trop court pour être transformé en profil technique.';
+        alert.classList.add('show');
+        return;
+      }
+      pushDrawHistory();
+      drawState.points = corrected.map((point, index) => ({ x: point.x, y: point.y, breakBefore: index > 0 && Boolean(point.breakBefore) }));
+      drawState.sketchPoints = [];
+      drawState.lastSketchPoints = [];
+      drawState.sketchDrawing = false;
+      drawState.activePointIndex = drawState.points.length - 1;
+      drawState.activeType = null;
+      drawState.activeIndex = null;
+      setDrawingTool('draw');
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function startSketch(event) {
+      if (drawState.sketchDrawing) return;
+      const point = getRawCanvasPoint(event);
+      drawState.cursorPoint = point;
+      drawState.sketchPoints = [point];
+      drawState.sketchDrawing = true;
+      drawState.sketchJustFinished = false;
+      renderDrawing();
+    }
+
+    function finishSketch() {
+      if (!drawState.sketchDrawing) return;
+      if (drawState.sketchPoints.length >= 2) {
+        drawState.lastSketchPoints = drawState.sketchPoints.map((point) => ({ x: point.x, y: point.y }));
+      }
+      drawState.sketchDrawing = false;
+      drawState.cursorPoint = null;
+      drawState.sketchJustFinished = true;
+      setTimeout(() => { drawState.sketchJustFinished = false; }, 120);
+      renderDrawing();
+    }
+
+    function applyLock(point) {
+      const start = drawState.points[drawState.activePointIndex] || drawState.points[drawState.points.length - 1];
+      if (!start) return point;
+      const mode = $('lockMode').value;
+      const dx = point.x - start.x;
+      const dy = point.y - start.y;
+      if (mode === 'h') return { x: point.x, y: start.y };
+      if (mode === 'v') return { x: start.x, y: point.y };
+      if (mode === '90') {
+        return Math.abs(dx) >= Math.abs(dy) ? { x: point.x, y: start.y } : { x: start.x, y: point.y };
+      }
+      if (mode === '45') {
+        const len = Math.hypot(dx, dy);
+        if (!len) return point;
+        const angle = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+        return snapPoint({ x: start.x + Math.cos(angle) * len, y: start.y + Math.sin(angle) * len });
+      }
+      return point;
+    }
+
+    function distance(a, b) {
+      return Math.hypot(b.x - a.x, b.y - a.y);
+    }
+
+    function coteLabel(index) {
+      let label = '';
+      let value = index;
+      do {
+        label = String.fromCharCode(65 + (value % 26)) + label;
+        value = Math.floor(value / 26) - 1;
+      } while (value >= 0);
+      return `Cote ${label}`;
+    }
+
+    function angleLabel(index) {
+      return `Angle ${index + 1}`;
+    }
+
+    function setActiveReference(type, index) {
+      drawState.activeType = type;
+      drawState.activeIndex = index;
+      renderDrawing();
+    }
+
+    function setDrawingTool(tool) {
+      drawState.tool = tool;
+      drawState.draggingPointIndex = null;
+      drawState.mergePointIndex = null;
+      drawState.preview = null;
+      document.querySelectorAll('#drawMode, #sketchMode, #moveMode, #mergeMode').forEach((button) => button.classList.remove('active'));
+      const buttonId = tool === 'sketch' ? 'sketchMode' : tool === 'move' ? 'moveMode' : tool === 'merge' ? 'mergeMode' : 'drawMode';
+      $(buttonId).classList.add('active');
+      renderDrawing();
+    }
+
+    function endCurrentTrace() {
+      drawState.activePointIndex = null;
+      drawState.preview = null;
+      drawState.draggingPointIndex = null;
+      drawState.mergePointIndex = null;
+      renderDrawing();
+    }
+
+    function normalizeActiveReference() {
+      if (drawState.activeType === 'segment' && !drawingSegments().some((segment) => segment.index === drawState.activeIndex)) {
+        drawState.activeType = null;
+        drawState.activeIndex = null;
+      }
+      if (drawState.activeType === 'angle' && !drawingAngles().some((angle) => angle.index === drawState.activeIndex)) {
+        drawState.activeType = null;
+        drawState.activeIndex = null;
+      }
+    }
+
+    function drawingSegments() {
+      const list = [];
+      for (let i = 0; i < drawState.points.length - 1; i += 1) {
+        if (drawState.points[i + 1].breakBefore) continue;
+        list.push({ index: i, a: drawState.points[i], b: drawState.points[i + 1], length: distance(drawState.points[i], drawState.points[i + 1]) });
+      }
+      return list;
+    }
+
+    function angleBetween(prev, vertex, next) {
+      const a1 = Math.atan2(prev.y - vertex.y, prev.x - vertex.x);
+      const a2 = Math.atan2(next.y - vertex.y, next.x - vertex.x);
+      let angle = Math.abs((a2 - a1) * 180 / Math.PI);
+      if (angle > 180) angle = 360 - angle;
+      return angle;
+    }
+
+    function drawingAngles() {
+      const list = [];
+      for (let i = 1; i < drawState.points.length - 1; i += 1) {
+        if (drawState.points[i].breakBefore || drawState.points[i + 1].breakBefore) continue;
+        list.push({ index: i, point: drawState.points[i], angle: angleBetween(drawState.points[i - 1], drawState.points[i], drawState.points[i + 1]) });
+      }
+      return list;
+    }
+
+    function drawingDeveloped() {
+      return drawingSegments().reduce((sum, segment) => sum + segment.length, 0);
+    }
+
+    function segmentByIndex(index) {
+      return drawingSegments().find((segment) => segment.index === index);
+    }
+
+    function deleteSegment(index) {
+      const segment = segmentByIndex(index);
+      if (!segment) return;
+      pushDrawHistory();
+      drawState.points[segment.index + 1].breakBefore = true;
+      drawState.activeType = null;
+      drawState.activeIndex = null;
+      drawState.activePointIndex = null;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function mergePoints(firstIndex, secondIndex) {
+      if (firstIndex === secondIndex || !drawState.points[firstIndex] || !drawState.points[secondIndex]) return;
+      pushDrawHistory();
+      const target = drawState.points[firstIndex];
+      drawState.points[secondIndex].x = target.x;
+      drawState.points[secondIndex].y = target.y;
+      drawState.activePointIndex = secondIndex;
+      drawState.mergePointIndex = null;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function selectPoint(index) {
+      if (!drawState.points[index]) return;
+      if (canCloseOnPoint(index)) {
+        if (confirm('Fermer le profil ?')) {
+          pushDrawHistory();
+          const source = drawState.points[index];
+          drawState.points.push({ x: source.x, y: source.y, breakBefore: false });
+          drawState.activePointIndex = drawState.points.length - 1;
+          saveDrawing();
+          renderDrawing();
+          update3D();
+          return;
+        }
+      }
+      drawState.activePointIndex = index;
+      drawState.activeType = null;
+      drawState.activeIndex = null;
+      renderDrawing();
+    }
+
+    function drawingReferenceListHtml() {
+      const segments = drawingSegments();
+      const angles = drawingAngles();
+      if (!segments.length) return '<p class="notice">Aucun segment pour le moment.</p>';
+      const segmentItems = segments.map((segment, order) => {
+        const active = drawState.activeType === 'segment' && drawState.activeIndex === segment.index;
+        return `<div class="measure-row ${active ? 'active' : ''}">
+          <button type="button" class="${active ? 'active' : ''}" data-seg="${segment.index}"><span>${coteLabel(order)}</span><strong>Modifier</strong></button>
+          <label class="measure-field" aria-label="${coteLabel(order)} en millimètres">
+            <input type="number" min="1" step="1" value="${Math.round(segment.length)}" data-seg-input="${segment.index}">
+            <em>mm</em>
+          </label>
+        </div>`;
+      }).join('');
+      const angleItems = angles.map((item, order) => {
+        const active = drawState.activeType === 'angle' && drawState.activeIndex === item.index;
+        return `<button type="button" class="${active ? 'active' : ''}" data-angle="${item.index}"><span>${angleLabel(order)}</span><strong>${Math.round(item.angle)}°</strong></button>`;
+      }).join('');
+      const angleInputItems = angles.map((item, order) => {
+        const active = drawState.activeType === 'angle' && drawState.activeIndex === item.index;
+        return `<div class="measure-row ${active ? 'active' : ''}">
+          <button type="button" class="${active ? 'active' : ''}" data-angle="${item.index}"><span>${angleLabel(order)}</span><strong>Modifier</strong></button>
+          <label class="measure-field" aria-label="${angleLabel(order)} en degrés">
+            <input type="number" min="1" max="179" step="1" value="${Math.round(item.angle)}" data-angle-input="${item.index}">
+            <em>°</em>
+          </label>
+        </div>`;
+      }).join('');
+      return `<div class="list-title">Cotes</div>${segmentItems}<div class="list-title">Angles</div>${angleInputItems || '<p class="notice">Aucun angle pour le moment.</p>'}`;
+    }
+
+    function drawingTraceGroups() {
+      const groups = [];
+      drawState.points.forEach((point) => {
+        if (!groups.length || point.breakBefore) groups.push([]);
+        groups[groups.length - 1].push(point);
+      });
+      return groups.filter((group) => group.length);
+    }
+
+    function traceIndexBounds() {
+      const bounds = [];
+      let start = 0;
+      drawState.points.forEach((point, index) => {
+        if (index > 0 && point.breakBefore) {
+          bounds.push({ start, end: index - 1 });
+          start = index;
+        }
+      });
+      if (drawState.points.length) bounds.push({ start, end: drawState.points.length - 1 });
+      return bounds;
+    }
+
+    function activeTraceBound() {
+      if (drawState.activePointIndex === null) return null;
+      return traceIndexBounds().find((bound) => drawState.activePointIndex >= bound.start && drawState.activePointIndex <= bound.end) || null;
+    }
+
+    function canCloseOnPoint(index) {
+      const bound = activeTraceBound();
+      return Boolean(bound && index === bound.start && drawState.activePointIndex === bound.end && bound.end - bound.start >= 2);
+    }
+
+    function isTraceStart(index) {
+      return index === 0 || Boolean(drawState.points[index]?.breakBefore);
+    }
+
+    function isTraceEnd(index) {
+      return index === drawState.points.length - 1 || Boolean(drawState.points[index + 1]?.breakBefore);
+    }
+
+    function cleanProfilePoints(points) {
+      const cleaned = [];
+      points.forEach((point) => {
+        if (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y)) return;
+        const next = { x: Math.round(point.x * 100) / 100, y: Math.round(point.y * 100) / 100, breakBefore: Boolean(point.breakBefore) };
+        const previous = cleaned[cleaned.length - 1];
+        if (!previous || next.breakBefore || distance(previous, next) >= 1) cleaned.push(next);
+      });
+      return cleaned;
+    }
+
+    function profileSegments(points) {
+      const segments = [];
+      for (let i = 0; i < points.length - 1; i += 1) {
+        if (points[i + 1].breakBefore) continue;
+        segments.push({ index: i, a: points[i], b: points[i + 1], length: distance(points[i], points[i + 1]) });
+      }
+      return segments;
+    }
+
+    function orientation(a, b, c) {
+      const value = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+      if (Math.abs(value) < .0001) return 0;
+      return value > 0 ? 1 : 2;
+    }
+
+    function onSegment(a, b, c) {
+      return b.x <= Math.max(a.x, c.x) + .0001 && b.x >= Math.min(a.x, c.x) - .0001
+        && b.y <= Math.max(a.y, c.y) + .0001 && b.y >= Math.min(a.y, c.y) - .0001;
+    }
+
+    function segmentsIntersect(a1, a2, b1, b2) {
+      const o1 = orientation(a1, a2, b1);
+      const o2 = orientation(a1, a2, b2);
+      const o3 = orientation(b1, b2, a1);
+      const o4 = orientation(b1, b2, a2);
+      if (o1 !== o2 && o3 !== o4) return true;
+      if (o1 === 0 && onSegment(a1, b1, a2)) return true;
+      if (o2 === 0 && onSegment(a1, b2, a2)) return true;
+      if (o3 === 0 && onSegment(b1, a1, b2)) return true;
+      if (o4 === 0 && onSegment(b1, a2, b2)) return true;
+      return false;
+    }
+
+    function sameDrawingPoint(a, b, tolerance = 1) {
+      return Boolean(a && b && distance(a, b) <= tolerance);
+    }
+
+    function segmentsShareEndpoint(first, second) {
+      return sameDrawingPoint(first.a, second.a)
+        || sameDrawingPoint(first.a, second.b)
+        || sameDrawingPoint(first.b, second.a)
+        || sameDrawingPoint(first.b, second.b);
+    }
+
+    function profileSelfIntersects(points) {
+      const segments = profileSegments(points);
+      for (let i = 0; i < segments.length; i += 1) {
+        for (let j = i + 1; j < segments.length; j += 1) {
+          if (Math.abs(segments[i].index - segments[j].index) <= 1) continue;
+          if (segmentsShareEndpoint(segments[i], segments[j])) continue;
+          if (i === 0 && j === segments.length - 1 && distance(points[0], points[points.length - 1]) < 1) continue;
+          if (segmentsIntersect(segments[i].a, segments[i].b, segments[j].a, segments[j].b)) return true;
+        }
+      }
+      return false;
+    }
+
+    function validateProfile(points, options = {}) {
+      const cleaned = cleanProfilePoints(points);
+      const segments = profileSegments(cleaned);
+      if (!options.allowIncomplete && cleaned.some((point, index) => index > 0 && point.breakBefore)) {
+        return { ok: false, points: cleaned, reason: 'Le dessin contient plusieurs tracés séparés.' };
+      }
+      if (cleaned.length !== points.length && !options.allowIncomplete) {
+        return { ok: false, points: cleaned, reason: 'Des points doublons ont été supprimés. Vérifiez le profil avant l’aperçu 3D.' };
+      }
+      if (cleaned.some((point) => !Number.isFinite(point.x) || !Number.isFinite(point.y))) {
+        return { ok: false, points: cleaned, reason: 'Le dessin contient un point invalide.' };
+      }
+      if (segments.some((segment) => segment.length < 1)) {
+        return { ok: false, points: cleaned, reason: 'Un segment est trop court pour générer un aperçu 3D fiable.' };
+      }
+      if (!options.allowIncomplete && segments.length < 2) {
+        return { ok: false, points: cleaned, reason: 'Tracez au moins deux segments pour générer l’aperçu 3D.' };
+      }
+      if (cleaned.length > 2 && distance(cleaned[0], cleaned[cleaned.length - 1]) < 1) {
+        return { ok: false, points: cleaned, reason: 'Les formes fermées ne sont pas gérées en 3D automatique pour cette version.' };
+      }
+      for (let i = 1; i < cleaned.length - 1; i += 1) {
+        if (options.ignoreAngles) break;
+        const angle = angleBetween(cleaned[i - 1], cleaned[i], cleaned[i + 1]);
+        if (!Number.isFinite(angle) || angle <= 1 || angle >= 179) {
+          return { ok: false, points: cleaned, reason: 'Un angle du profil est trop fermé ou trop plat pour un aperçu 3D fiable.' };
+        }
+      }
+      const developed = segments.reduce((sum, segment) => sum + segment.length, 0);
+      if (!options.allowIncomplete && developed > drawState.maxDeveloped) {
+        return { ok: false, points: cleaned, reason: `Développé ${Math.round(developed)} mm : à vérifier selon la largeur maximale de pliage.` };
+      }
+      if (!options.ignoreIntersections && profileSelfIntersects(cleaned)) {
+        return { ok: false, points: cleaned, reason: 'Le profil se recroise. Corrigez le dessin 2D pour générer la 3D.' };
+      }
+      return { ok: true, points: cleaned, segments, developed };
+    }
+
+    function pointCross(point, options = {}) {
+      if (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y)) return '';
+      const size = options.size || 12;
+      const stroke = options.stroke || '#FF6B00';
+      const width = options.width || 2.4;
+      const opacity = options.opacity || 1;
+      return `<g class="point-cross" pointer-events="none" opacity="${opacity}">
+        <line x1="${point.x - size}" y1="${point.y}" x2="${point.x + size}" y2="${point.y}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round"/>
+        <line x1="${point.x}" y1="${point.y - size}" x2="${point.x}" y2="${point.y + size}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round"/>
+        <circle cx="${point.x}" cy="${point.y}" r="2.2" fill="${stroke}"/>
+      </g>`;
+    }
+
+    function prepare3DProfile(sourcePoints) {
+      const cleaned = cleanProfilePoints(sourcePoints)
+        .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y));
+      const segments = profileSegments(cleaned)
+        .filter((segment) => segment.length >= 1 && cleaned[segment.index] && cleaned[segment.index + 1]);
+      if (segments.length < 1) {
+        return {
+          ok: false,
+          points: cleaned,
+          segments: [],
+          developed: 0,
+          reason: 'Tracez au moins un segment pour générer l’aperçu 3D.'
+        };
+      }
+      const developed = segments.reduce((sum, segment) => sum + segment.length, 0);
+      const notes = [];
+      if (cleaned.some((point, index) => index > 0 && point.breakBefore)) {
+        notes.push('plusieurs tracés détectés');
+      }
+      if (profileSelfIntersects(cleaned)) {
+        notes.push('croisement détecté');
+      }
+      if (developed > drawState.maxDeveloped) {
+        notes.push(`développé ${Math.round(developed)} mm`);
+      }
+      const message = notes.length
+        ? `Aperçu 3D simplifié généré malgré ${notes.join(', ')}. Le dessin 2D coté reste la référence pour le devis.`
+        : '';
+      return { ok: true, points: cleaned, segments, developed, message };
+    }
+
+    function renderDrawing() {
+      const svg = $('profileCanvas');
+      if (!svg) return;
+      setCanvasViewBox();
+      normalizeActiveReference();
+      const points = drawState.points;
+      const segments = drawingSegments();
+      const angles = drawingAngles();
+      const previewStart = drawState.points[drawState.activePointIndex];
+      const preview = drawState.preview && previewStart ? `<line x1="${previewStart.x}" y1="${previewStart.y}" x2="${drawState.preview.x}" y2="${drawState.preview.y}" stroke="#FF6B00" stroke-width="3" stroke-dasharray="8 8"/>` : '';
+      const tracePolylines = '';
+      const sketchPolyline = drawState.sketchPoints.length > 1 ? `<polyline points="${drawState.sketchPoints.map((point) => `${point.x},${point.y}`).join(' ')}" fill="none" stroke="#FF6B00" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" opacity=".82"/>` : '';
+      const sketchPoint = drawState.sketchPoints[drawState.sketchPoints.length - 1];
+      const sketchCross = sketchPoint ? pointCross(sketchPoint, { size: 13, width: 2.8 }) : '';
+      const cursorCross = drawState.cursorPoint && !drawState.sketchDrawing ? pointCross(drawState.cursorPoint, { size: 11, width: 2, opacity: .7 }) : '';
+      const segmentLines = segments.map((segment) => {
+        const active = drawState.activeType === 'segment' && drawState.activeIndex === segment.index;
+        const hit = `<line data-seg="${segment.index}" x1="${segment.a.x}" y1="${segment.a.y}" x2="${segment.b.x}" y2="${segment.b.y}" stroke="transparent" stroke-width="28" stroke-linecap="round" style="cursor:pointer"/>`;
+        const visible = `<line x1="${segment.a.x}" y1="${segment.a.y}" x2="${segment.b.x}" y2="${segment.b.y}" stroke="${active ? '#FF6B00' : '#111'}" stroke-width="${active ? 9 : 5}" stroke-linecap="square" pointer-events="none"/>`;
+        return `${hit}${visible}`;
+      }).join('');
+      const segmentLabels = segments.map((segment, order) => {
+        const x = (segment.a.x + segment.b.x) / 2;
+        const y = (segment.a.y + segment.b.y) / 2 - 12;
+        const active = drawState.activeType === 'segment' && drawState.activeIndex === segment.index;
+        const label = `${coteLabel(segment.index)} · ${Math.round(segment.length)} mm`;
+        const displayLabel = label.replace(coteLabel(segment.index), coteLabel(order));
+        const width = Math.max(116, displayLabel.length * 7.2);
+        return `<g data-seg="${segment.index}" class="measure-label" style="cursor:pointer"><rect x="${x - width / 2}" y="${y - 18}" width="${width}" height="25" rx="4" fill="${active ? '#FF6B00' : '#111'}"/><text x="${x}" y="${y}" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">${displayLabel}</text></g>`;
+      }).join('');
+      const angleLabels = angles.map((item) => {
+        const label = `${Math.round(item.angle)}°`;
+        return `<g data-angle="${item.index}" class="angle-label" style="cursor:pointer"><circle cx="${item.point.x + 30}" cy="${item.point.y + 24}" r="18" fill="rgba(255,107,0,.95)"/><text x="${item.point.x + 30}" y="${item.point.y + 29}" fill="#fff" font-size="12" font-weight="900" text-anchor="middle">${label}</text></g>`;
+      }).join('');
+      const pointDots = points.map((point, index) => {
+        const active = drawState.activePointIndex === index || drawState.draggingPointIndex === index || drawState.mergePointIndex === index;
+        const hovered = drawState.hoveredPointIndex === index;
+        const closeTarget = hovered && canCloseOnPoint(index);
+        const endpoint = isTraceStart(index) || isTraceEnd(index);
+        const fill = closeTarget ? '#24b36b' : active || hovered ? '#FF6B00' : endpoint ? '#fff' : '#111';
+        const label = isTraceStart(index) ? 'D' : isTraceEnd(index) ? 'F' : '';
+        const halo = active ? `<circle cx="${point.x}" cy="${point.y}" r="16" fill="none" stroke="#FF6B00" stroke-width="3" opacity=".38"/>` : '';
+        const cross = (active || hovered || closeTarget) ? pointCross(point, { stroke: closeTarget ? '#24b36b' : '#FF6B00', size: 13, width: 2.6 }) : '';
+        const selectedText = active ? `<text x="${point.x + 20}" y="${point.y - 16}" fill="#FF6B00" font-size="12" font-weight="900">Point sélectionné</text>` : '';
+        return `<g data-point="${index}" style="cursor:${drawState.tool === 'move' ? 'grab' : 'pointer'}"><circle cx="${point.x}" cy="${point.y}" r="20" fill="transparent"/>${halo}<circle cx="${point.x}" cy="${point.y}" r="${endpoint || hovered ? 8 : 5}" fill="${fill}" stroke="${closeTarget ? '#24b36b' : '#FF6B00'}" stroke-width="${active || hovered ? 4 : 2}"/>${cross}${label ? `<text x="${point.x}" y="${point.y + 4}" fill="${active || hovered ? '#111' : '#FF6B00'}" font-size="9" font-weight="900" text-anchor="middle">${label}</text>` : ''}${selectedText}</g>`;
+      }).join('');
+      const numberedAngleLabels = angles.map((item, order) => {
+        const active = drawState.activeType === 'angle' && drawState.activeIndex === item.index;
+        const label = `${angleLabel(order)} · ${Math.round(item.angle)}°`;
+        const x = item.point.x + 45;
+        const y = item.point.y + 26;
+        const width = Math.max(112, label.length * 7.1);
+        return `<g data-angle="${item.index}" class="angle-label" style="cursor:pointer"><rect x="${x - width / 2}" y="${y - 18}" width="${width}" height="25" rx="13" fill="${active ? '#111' : 'rgba(255,107,0,.95)'}" stroke="#FF6B00" stroke-width="${active ? 3 : 0}"/><text x="${x}" y="${y}" fill="#fff" font-size="12" font-weight="900" text-anchor="middle">${label}</text></g>`;
+      }).join('');
+      svg.innerHTML = `
+        <defs>
+          <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(17,17,17,.08)" stroke-width="1"/></pattern>
+          <pattern id="bigGrid" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="url(#smallGrid)"/><path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(17,17,17,.16)" stroke-width="1.5"/></pattern>
+        </defs>
+        <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#bigGrid)"/>
+        ${tracePolylines}
+        ${sketchPolyline}
+        ${sketchCross}
+        ${segmentLines}
+        ${preview}
+        ${segmentLabels}
+        ${numberedAngleLabels}
+        ${pointDots}
+        ${cursorCross}
+      `;
+      updateDrawingSummary();
+    }
+
+    function updateDrawingSummary() {
+      const developed = drawingDeveloped();
+      const folds = drawingAngles().length;
+      const length = Math.max(.1, Number($('lengthTotal').value) || .1);
+      const surface = developed / 1000 * length;
+      $('freeDeveloped').textContent = `${Math.round(developed)} mm`;
+      $('freeFolds').textContent = String(folds);
+      $('freeSegments').textContent = String(drawingSegments().length);
+      $('freeSurface').textContent = `${surface.toFixed(2).replace('.', ',')} m²`;
+      const alert = $('drawAlert');
+      if (!drawState.points.length) {
+        alert.textContent = 'Le dessin est vide. Cliquez dans la grille pour commencer.';
+        alert.classList.add('show');
+      } else if (developed > drawState.maxDeveloped) {
+        alert.textContent = `Attention : développé ${Math.round(developed)} mm. À vérifier selon la largeur maximale de pliage.`;
+        alert.classList.add('show');
+      } else {
+        alert.textContent = '';
+        alert.classList.remove('show');
+      }
+      $('drawHelp').textContent = drawState.tool === 'sketch'
+        ? 'Dessinez librement à la souris ou au doigt, puis cliquez sur Corriger le croquis.'
+        : drawState.hoveredPointIndex !== null
+          ? 'Point détecté : cliquez pour vous accrocher exactement dessus.'
+          : drawState.activePointIndex !== null ? 'Cliquez pour créer le prochain segment. Clic droit ou Échap : terminer le tracé. Cliquez sur une cote ou un trait pour modifier la mesure.' : 'Cliquez où vous voulez pour démarrer un nouveau tracé, ou cliquez un point existant pour reprendre depuis ce point. Cliquez sur une cote ou un trait pour modifier la mesure.';
+      if (drawState.points.length) {
+        const validation = validateProfile(drawState.points, { allowIncomplete: true, ignoreIntersections: true, ignoreAngles: true });
+        if (!validation.ok) {
+          if (validation.reason.includes('plusieurs tracés')) {
+            alert.classList.remove('show');
+          } else {
+            alert.textContent = validation.reason;
+            alert.classList.add('show');
+          }
+        }
+      }
+      if (!drawState.lockReferenceList) $('segmentList').innerHTML = drawingReferenceListHtml();
+      if ($('summaryField')) $('summaryField').value = buildSummary();
+    }
+
+    function applySegmentLength(index, rawValue, options = {}) {
+      const segment = segmentByIndex(index);
+      if (!segment) return false;
+      const normalized = String(rawValue).replace(',', '.').trim();
+      if (!normalized) return false;
+      const nextLength = Math.max(1, Number(normalized));
+      if (!Number.isFinite(nextLength) || nextLength < 1) return false;
+      drawState.activeType = 'segment';
+      drawState.activeIndex = index;
+      drawState.activePointIndex = null;
+      drawState.future = [];
+      const current = segment.length || 1;
+      const ux = (segment.b.x - segment.a.x) / current;
+      const uy = (segment.b.y - segment.a.y) / current;
+      const newPoint = { x: segment.a.x + ux * nextLength, y: segment.a.y + uy * nextLength };
+      const dx = newPoint.x - segment.b.x;
+      const dy = newPoint.y - segment.b.y;
+      if (!options.live) pushDrawHistory();
+      for (let i = index + 1; i < drawState.points.length && !drawState.points[i].breakBefore; i += 1) {
+        drawState.points[i].x += dx;
+        drawState.points[i].y += dy;
+      }
+      saveDrawing();
+      renderDrawing();
+      update3D();
+      return true;
+    }
+
+    function editSegmentLength(index) {
+      const segment = segmentByIndex(index);
+      if (!segment) return;
+      const value = prompt('Longueur exacte du segment en mm', String(Math.round(segment.length)));
+      if (value === null) return;
+      applySegmentLength(index, value);
+    }
+
+    function applyAngle(index, rawValue, options = {}) {
+      if (index <= 0 || index >= drawState.points.length - 1) return false;
+      const normalized = String(rawValue).replace(',', '.').trim();
+      if (!normalized) return false;
+      const nextAngle = Math.min(179, Math.max(1, Number(normalized)));
+      if (!Number.isFinite(nextAngle)) return false;
+      drawState.activeType = 'angle';
+      drawState.activeIndex = index;
+      drawState.activePointIndex = null;
+      drawState.future = [];
+      const prev = drawState.points[index - 1];
+      const vertex = drawState.points[index];
+      const next = drawState.points[index + 1];
+      const base = Math.atan2(prev.y - vertex.y, prev.x - vertex.x);
+      const cross = (prev.x - vertex.x) * (next.y - vertex.y) - (prev.y - vertex.y) * (next.x - vertex.x);
+      const sign = cross >= 0 ? 1 : -1;
+      const targetDirection = base + sign * nextAngle * Math.PI / 180;
+      const currentDirection = Math.atan2(next.y - vertex.y, next.x - vertex.x);
+      const delta = targetDirection - currentDirection;
+      const cos = Math.cos(delta);
+      const sin = Math.sin(delta);
+      if (!options.live) pushDrawHistory();
+      for (let i = index + 1; i < drawState.points.length && !drawState.points[i].breakBefore; i += 1) {
+        const px = drawState.points[i].x - vertex.x;
+        const py = drawState.points[i].y - vertex.y;
+        drawState.points[i].x = vertex.x + px * cos - py * sin;
+        drawState.points[i].y = vertex.y + px * sin + py * cos;
+      }
+      saveDrawing();
+      renderDrawing();
+      update3D();
+      return true;
+    }
+
+    function editAngle(index) {
+      if (index <= 0 || index >= drawState.points.length - 1) return;
+      const currentAngle = angleBetween(drawState.points[index - 1], drawState.points[index], drawState.points[index + 1]);
+      const value = prompt('Angle exact en degrés', String(Math.round(currentAngle)));
+      if (value === null) return;
+      applyAngle(index, value);
+    }
+
+    function oldEditSegmentLengthUnused(index) {
+      const segment = segmentByIndex(index);
+      if (!segment) return;
+      const value = prompt('Longueur exacte du segment en mm', String(Math.round(segment.length)));
+      if (value === null) return;
+      const nextLength = Math.max(1, Number(String(value).replace(',', '.')) || 0);
+      const current = segment.length || 1;
+      const ux = (segment.b.x - segment.a.x) / current;
+      const uy = (segment.b.y - segment.a.y) / current;
+      const newPoint = { x: segment.a.x + ux * nextLength, y: segment.a.y + uy * nextLength };
+      const dx = newPoint.x - segment.b.x;
+      const dy = newPoint.y - segment.b.y;
+      pushDrawHistory();
+      for (let i = index + 1; i < drawState.points.length && !drawState.points[i].breakBefore; i += 1) {
+        drawState.points[i].x += dx;
+        drawState.points[i].y += dy;
+      }
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function oldEditAngleUnused(index) {
+      if (index <= 0 || index >= drawState.points.length - 1) return;
+      const currentAngle = angleBetween(drawState.points[index - 1], drawState.points[index], drawState.points[index + 1]);
+      const value = prompt('Angle exact en degrés', String(Math.round(currentAngle)));
+      if (value === null) return;
+      const nextAngle = Math.min(179, Math.max(1, Number(String(value).replace(',', '.')) || 90));
+      const prev = drawState.points[index - 1];
+      const vertex = drawState.points[index];
+      const next = drawState.points[index + 1];
+      const len = distance(vertex, next) || 1;
+      const base = Math.atan2(prev.y - vertex.y, prev.x - vertex.x);
+      const cross = (prev.x - vertex.x) * (next.y - vertex.y) - (prev.y - vertex.y) * (next.x - vertex.x);
+      const sign = cross >= 0 ? 1 : -1;
+      const rad = base + sign * nextAngle * Math.PI / 180;
+      const newNext = { x: vertex.x + Math.cos(rad) * len, y: vertex.y + Math.sin(rad) * len };
+      const dx = newNext.x - next.x;
+      const dy = newNext.y - next.y;
+      pushDrawHistory();
+      for (let i = index + 1; i < drawState.points.length && !drawState.points[i].breakBefore; i += 1) {
+        drawState.points[i].x += dx;
+        drawState.points[i].y += dy;
+      }
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function addDrawingPoint(point) {
+      const nearby = findPointNearCanvasPoint(point);
+      if (nearby) point = { x: nearby.point.x, y: nearby.point.y };
+      const nextPoints = clonePoints();
+      if (drawState.activePointIndex === null || !nextPoints[drawState.activePointIndex]) {
+        nextPoints.push({ x: point.x, y: point.y, breakBefore: nextPoints.length > 0 });
+      } else {
+        const anchor = nextPoints[drawState.activePointIndex];
+        if (drawState.activePointIndex !== nextPoints.length - 1) {
+          nextPoints.push({ x: anchor.x, y: anchor.y, breakBefore: true });
+        }
+        nextPoints.push({ x: point.x, y: point.y, breakBefore: false });
+      }
+      const candidate = cleanProfilePoints(nextPoints);
+      pushDrawHistory();
+      drawState.points = candidate;
+      drawState.activePointIndex = drawState.points.length - 1;
+      drawState.preview = null;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function undoDrawing() {
+      if (!drawState.history.length) return;
+      drawState.future.push(clonePoints());
+      drawState.points = drawState.history.pop();
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function redoDrawing() {
+      if (!drawState.future.length) return;
+      drawState.history.push(clonePoints());
+      drawState.points = drawState.future.pop();
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    }
+
+    function drawingTextSummary() {
+      if (drawState.points.length < 2) return 'Dessin libre : non renseigné';
+      const segments = drawingSegments().map((segment, order) => `${coteLabel(order)} : ${Math.round(segment.length)} mm`).join('\\n');
+      const angles = drawingAngles().map((item, order) => `${angleLabel(order)} : ${Math.round(item.angle)} deg`).join('\\n');
+      return [
+        'Dessin libre 2D',
+        `Developpe dessin : ${Math.round(drawingDeveloped())} mm`,
+        `Nombre de plis : ${drawingAngles().length}`,
+        segments,
+        angles || 'Angles : aucun'
+      ].join('\\n');
+    }
+
+    function iconSvg(type) {
+      const stroke = 'stroke="#FF6B00" stroke-width="9" fill="none" stroke-linecap="square" stroke-linejoin="miter"';
+      if (type === 'cover') return `<svg viewBox="0 0 180 110"><path ${stroke} d="M25 18H155V90L138 72M25 18V90L42 72"/></svg>`;
+      if (type === 'bavette') return `<svg viewBox="0 0 180 110"><path ${stroke} d="M30 10V64H150V96L136 82"/></svg>`;
+      if (type === 'solin') return `<svg viewBox="0 0 180 150"><path ${stroke} d="M102 16L72 46V74L120 100V138L98 116"/></svg>`;
+      if (type === 'rive') return `<svg viewBox="0 0 180 120"><path ${stroke} d="M82 12V72L122 100H92"/></svg>`;
+      if (type === 'cheneau') return `<svg viewBox="0 0 180 110"><path ${stroke} d="M24 18L52 46M24 18V90H112L158 42H132"/></svg>`;
+      if (type === 'bande-rive') return `<svg viewBox="0 0 180 110"><path ${stroke} d="M26 10V84H148L116 52"/></svg>`;
+      if (type === 'costiere') return `<svg viewBox="0 0 180 110"><path ${stroke} d="M48 10V86H150"/></svg>`;
+      if (type === 'noue') return `<svg viewBox="0 0 180 110"><path ${stroke} d="M24 20L90 90L156 20"/></svg>`;
+      if (type === 'l') return `<svg viewBox="0 0 180 100"><path ${stroke} d="M30 30h105v48"/><path stroke="rgba(255,255,255,.4)" stroke-width="4" d="M30 82h120"/></svg>`;
+      if (type === 'z') return `<svg viewBox="0 0 180 100"><path ${stroke} d="M35 30h90l-35 42h58"/></svg>`;
+      if (type === 'custom') return `<svg viewBox="0 0 180 100"><path ${stroke} d="M35 70 70 28l38 24 34-16"/><circle cx="70" cy="28" r="7" fill="#FF6B00"/><circle cx="108" cy="52" r="7" fill="#FF6B00"/></svg>`;
+      return `<svg viewBox="0 0 180 100"><path ${stroke} d="M35 30h110v45"/><path ${stroke} d="M35 30v45"/><path stroke="rgba(255,255,255,.4)" stroke-width="4" d="M25 82h130"/></svg>`;
+    }
+
+    function renderPieces() {
+      $('pieceGrid').innerHTML = pieces.map((piece) => `
+        <article class="piece-card ${piece.id === state.piece.id ? 'selected' : ''}" data-piece="${piece.id}" tabindex="0" role="button" aria-label="Choisir ${piece.name}">
+          <div class="piece-drawing">${iconSvg(piece.icon)}</div>
+          <div><h3>${piece.name}</h3><p>${piece.desc}</p></div>
+          <div class="choice-row"><strong>Choisir</strong><span>→</span></div>
+        </article>
+      `).join('');
+      document.querySelectorAll('.piece-card').forEach((card) => {
+        const choose = () => selectPiece(card.dataset.piece);
+        card.addEventListener('click', choose);
+        card.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            choose();
+          }
+        });
+      });
+    }
+
+    function selectPiece(id) {
+      state.piece = pieces.find((piece) => piece.id === id) || pieces[0];
+      state.dims = { A: state.piece.dims[0], B: state.piece.dims[1], C: state.piece.dims[2], D: state.piece.dims[3] || 0 };
+      $('dimA').value = state.dims.A;
+      $('dimB').value = state.dims.B;
+      $('dimC').value = state.dims.C;
+      $('dimD').value = state.dims.D;
+      resetStandardAngles();
+      if (state.piece.length) $('lengthTotal').value = state.piece.length;
+      $('selectedTitle').textContent = state.piece.name;
+      renderPieces();
+      updateAll();
+      document.querySelector('#dimensions').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function getDims() {
+      state.dims.A = Math.max(1, Number($('dimA').value) || 1);
+      state.dims.B = Math.max(1, Number($('dimB').value) || 1);
+      state.dims.C = Math.max(1, Number($('dimC').value) || 1);
+      state.dims.D = Math.max(0, Number($('dimD').value) || 0);
+      return state.dims;
+    }
+
+    function profileAngles(points = cleanProfilePoints(presetProfilePoints())) {
+      const list = [];
+      for (let i = 1; i < points.length - 1; i += 1) {
+        const angle = angleBetween(points[i - 1], points[i], points[i + 1]);
+        if (Number.isFinite(angle) && angle > 2 && angle < 178) list.push(Math.round(angle));
+      }
+      return list.slice(0, 4);
+    }
+
+    function resetStandardAngles() {
+      state.angles = profileAngles();
+      for (let i = 1; i <= 4; i += 1) {
+        const input = $(`stdAngle${i}`);
+        if (!input) continue;
+        const value = state.angles[i - 1];
+        input.value = Number.isFinite(value) ? value : '';
+        input.closest('.field')?.classList.toggle('is-hidden', !Number.isFinite(value));
+      }
+    }
+
+    function getStandardAngles() {
+      state.angles = [1, 2, 3, 4].map((index) => {
+        const input = $(`stdAngle${index}`);
+        const value = Number(String(input?.value || '').replace(',', '.'));
+        return Number.isFinite(value) && value > 0 ? Math.min(179, Math.max(1, value)) : null;
+      }).filter((value) => value !== null);
+      return state.angles;
+    }
+
+    function dimensionWarnings() {
+      const { A, B, C, D } = getDims();
+      const warnings = [];
+      const developed = A + B + C + (D * (state.piece.returns || 0));
+      if (A < 20 || B < 10 || C < 10) warnings.push('Certaines cotes sont trop petites pour un façonnage exploitable.');
+      if (A > 1250 || B > 600 || C > 600 || D > 250) warnings.push('Une cote dépasse la limite conseillée du configurateur.');
+      if (D > 0 && D > Math.max(B, C)) warnings.push('Le retour bas D semble supérieur aux retombées : vérifiez la cohérence.');
+      if (developed > drawState.maxDeveloped) warnings.push(`Développé ${Math.round(developed)} mm : à vérifier selon la largeur maximale de pliage.`);
+      return warnings;
+    }
+
+    function updateDimensionWarning() {
+      const warning = $('dimWarning');
+      if (!warning) return;
+      const warnings = dimensionWarnings();
+      warning.textContent = warnings.join(' ');
+      warning.classList.toggle('show', warnings.length > 0);
+      ['dimA','dimB','dimC','dimD'].forEach((id) => {
+        const input = $(id);
+        if (!input) return;
+        const value = Number(input.value);
+        const min = Number(input.min || 0);
+        const max = Number(input.max || Infinity);
+        input.closest('.field')?.classList.toggle('is-invalid', !Number.isFinite(value) || value < min || value > max);
+      });
+    }
+
+    function mapProfileToSvg(points, width = 620, height = 360) {
+      const padding = 112;
+      const xs = points.map((point) => point.x);
+      const ys = points.map((point) => point.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const profileWidth = Math.max(1, maxX - minX);
+      const profileHeight = Math.max(1, maxY - minY);
+      const fitScale = Math.min((width - padding * 2) / profileWidth, (height - padding * 2) / profileHeight);
+      const readableScale = 245 / Math.max(profileWidth, profileHeight);
+      const scale = Math.min(fitScale, Math.max(readableScale, fitScale * .72));
+      const offsetX = (width - (maxX - minX) * scale) / 2;
+      const offsetY = (height - (maxY - minY) * scale) / 2;
+      return points.map((point) => ({
+        x: offsetX + (point.x - minX) * scale,
+        y: offsetY + (point.y - minY) * scale,
+        source: point
+      }));
+    }
+
+    function svgPathFromPoints(points) {
+      if (!points.length) return '';
+      return `M${points.map((point) => `${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(' L')}`;
+    }
+
+    function segmentLengthLabels(points) {
+      const labels = [];
+      const dims = getDims();
+      const labelsByPiece = {
+        couvertine: ['D', 'B', 'A', 'C', 'D'],
+        bavette: ['B', 'A', 'C', 'D'],
+        solin: ['D', 'B', 'A', 'C', 'D'],
+        rive: ['B', 'A', 'D'],
+        cheneau: ['D', 'B', 'A', 'C', 'D'],
+        'bande-rive': ['B', 'A', 'D'],
+        costiere: ['B', 'A'],
+        noue: ['B', 'C']
+      };
+      const names = labelsByPiece[state.piece.id] || ['B', 'A'];
+      const valueFor = { A: dims.A, B: dims.B, C: dims.C, D: dims.D };
+      for (let i = 0; i < points.length - 1; i += 1) {
+        const name = names[i] || coteLabel(i).replace('Cote ', '');
+        const a = points[i];
+        const b = points[i + 1];
+        const x = (a.x + b.x) / 2;
+        const y = (a.y + b.y) / 2 - 15;
+        const value = valueFor[name] ?? Math.round(distance(a.source, b.source));
+        labels.push({ name, value, x, y });
+      }
+      return labels.filter((label) => label.name !== 'D' || Number(label.value) > 0);
+    }
+
+    function dimensionCallouts() {
+      const { A, B, C, D } = getDims();
+      const items = [
+        { key: 'A', field: 'dimA', value: A, x: 288, y: 20 },
+        { key: 'B', field: 'dimB', value: B, x: 42, y: 158 },
+        { key: 'C', field: 'dimC', value: C, x: 536, y: 158 },
+        { key: 'D', field: 'dimD', value: D, x: 288, y: 300 }
+      ].filter((item) => item.key !== 'D' || Number(item.value) > 0);
+      return items.map((item) => `
+        <foreignObject x="${item.x}" y="${item.y}" width="44" height="44"><button class="dim-click" data-focus="${item.field}">${item.key}</button></foreignObject>
+      `).join('');
+    }
+
+    function diagramAngleCallouts(points) {
+      const values = getStandardAngles();
+      const positions = [
+        { x: 88, y: 78 },
+        { x: 410, y: 78 },
+        { x: 88, y: 258 },
+        { x: 410, y: 258 }
+      ];
+      const angles = [];
+      for (let i = 1; i < points.length - 1; i += 1) {
+        const angle = angleBetween(points[i - 1].source || points[i - 1], points[i].source || points[i], points[i + 1].source || points[i + 1]);
+        if (!Number.isFinite(angle) || angle <= 2 || angle >= 178) continue;
+        const order = angles.length;
+        const position = positions[order] || { x: 18 + order * 120, y: 314 };
+        const value = values[order] || Math.round(angle);
+        angles.push(`<foreignObject x="${x}" y="${y}" width="84" height="30"><span class="angle-chip">${Math.round(angle)}°</span></foreignObject>`);
+      }
+      return angles.join('');
+    }
+
+    function diagramAngleCallouts(points) {
+      const values = getStandardAngles();
+      const positions = [
+        { x: 82, y: 78 },
+        { x: 412, y: 78 },
+        { x: 82, y: 258 },
+        { x: 412, y: 258 }
+      ];
+      const angleCount = Math.min(profileAngles(points.map((point) => point.source || point)).length, 4);
+      return Array.from({ length: angleCount }).map((_, index) => {
+        const position = positions[index] || { x: 18 + index * 120, y: 314 };
+        const value = values[index] || profileAngles()[index] || 90;
+        return `<foreignObject x="${position.x}" y="${position.y}" width="132" height="34"><button class="angle-chip" data-focus="stdAngle${index + 1}">Angle ${index + 1} · ${Math.round(value)}°</button></foreignObject>`;
+      }).join('');
+    }
+
+    function renderDiagram() {
+      const svg = $('dimensionSvg');
+      const profile = cleanProfilePoints(presetProfilePoints()).filter((point, index, list) => index === 0 || distance(point, list[index - 1]) > 1);
+      const mapped = mapProfileToSvg(profile);
+      const path = svgPathFromPoints(mapped);
+      const points = mapped.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="5" fill="#111" stroke="#FF6B00" stroke-width="2"/>`).join('');
+      const dimCallouts = dimensionCallouts();
+      const angleCallouts = diagramAngleCallouts(mapped);
+      svg.innerHTML = `
+        <defs>
+          <filter id="glow"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#FF6B00" flood-opacity=".22"/></filter>
+        </defs>
+        <path d="${path}" stroke="rgba(255,255,255,.18)" stroke-width="18" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path d="${path}" stroke="#FF6B00" stroke-width="7" fill="none" stroke-linecap="square" stroke-linejoin="miter" filter="url(#glow)"/>
+        ${points}
+        ${angleCallouts}
+        ${dimCallouts}
+      `;
+      svg.querySelectorAll('.dim-click, .dim-chip, .angle-chip').forEach((button) => {
+        button.addEventListener('click', () => {
+          const field = $(button.dataset.focus);
+          field.focus();
+          field.select?.();
+        });
+      });
+      svg.classList.remove('dim-updated');
+      void svg.offsetWidth;
+      svg.classList.add('dim-updated');
+      updateDimensionWarning();
+    }
+
+    function calculate() {
+      const { A, B, C, D } = getDims();
+      const developed = A + B + C + (D * (state.piece.returns || 0));
+      const length = Math.max(.1, Number($('lengthTotal').value) || .1);
+      const surface = developed / 1000 * length;
+      const thick = Number($('thickness').value) / 1000;
+      const materialDensity = density[$('material').value] || 7850;
+      const weight = surface * thick * materialDensity;
+      $('calcDeveloped').textContent = `${Math.round(developed)} mm`;
+      $('calcSurface').textContent = `${surface.toFixed(2).replace('.', ',')} m²`;
+      $('calcWeight').textContent = `${weight.toFixed(2).replace('.', ',')} kg`;
+      return { developed, surface, weight, length, quantity: Math.max(1, Number($('quantity').value) || 1) };
+    }
+
+    let scene, camera, renderer, controls, shapeGroup, gridHelper, fallback3D;
+    function init3D() {
+      const stage = $('threeStage');
+      if (!window.THREE || !stage) {
+        initFallback3D();
+        return;
+      }
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(45, stage.clientWidth / stage.clientHeight, 0.1, 100);
+      camera.position.set(4, 3, 5);
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(stage.clientWidth, stage.clientHeight);
+      stage.innerHTML = '';
+      stage.appendChild(renderer.domElement);
+      const light = new THREE.HemisphereLight(0xffffff, 0x222222, 1.4);
+      scene.add(light);
+      const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+      dir.position.set(3, 5, 4);
+      scene.add(dir);
+      gridHelper = new THREE.GridHelper(7, 12, 0xff6b00, 0x343434);
+      gridHelper.position.y = -2.2;
+      gridHelper.material.transparent = true;
+      gridHelper.material.opacity = .34;
+      scene.add(gridHelper);
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.target.set(0, 0, 0);
+      update3D();
+      animate();
+      window.addEventListener('resize', () => {
+        if (!renderer) return;
+        camera.aspect = stage.clientWidth / stage.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(stage.clientWidth, stage.clientHeight);
+      });
+    }
+
+    function initFallback3D() {
+      const stage = $('threeStage');
+      if (!stage) return;
+      stage.innerHTML = '<canvas id="fallback3DCanvas" style="display:block;width:100%;height:100%;min-height:470px"></canvas>';
+      const canvas = $('fallback3DCanvas');
+      fallback3D = { canvas, ctx: canvas.getContext('2d'), rotX: -.28, rotY: .72, zoom: 1, dragging: false, lastX: 0, lastY: 0 };
+      const resize = () => {
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.max(1, Math.round(stage.clientWidth * ratio));
+        canvas.height = Math.max(1, Math.round(stage.clientHeight * ratio));
+        canvas.style.width = `${stage.clientWidth}px`;
+        canvas.style.height = `${stage.clientHeight}px`;
+        fallback3D.ratio = ratio;
+        updateFallback3D();
+      };
+      canvas.addEventListener('pointerdown', (event) => {
+        fallback3D.dragging = true;
+        fallback3D.lastX = event.clientX;
+        fallback3D.lastY = event.clientY;
+        canvas.setPointerCapture(event.pointerId);
+      });
+      canvas.addEventListener('pointermove', (event) => {
+        if (!fallback3D.dragging) return;
+        fallback3D.rotY += (event.clientX - fallback3D.lastX) * .01;
+        fallback3D.rotX += (event.clientY - fallback3D.lastY) * .01;
+        fallback3D.rotX = Math.max(-1.2, Math.min(1.2, fallback3D.rotX));
+        fallback3D.lastX = event.clientX;
+        fallback3D.lastY = event.clientY;
+        updateFallback3D();
+      });
+      canvas.addEventListener('pointerup', () => { fallback3D.dragging = false; });
+      canvas.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        fallback3D.zoom = Math.max(.55, Math.min(2.2, fallback3D.zoom + (event.deltaY > 0 ? -.08 : .08)));
+        updateFallback3D();
+      }, { passive: false });
+      window.addEventListener('resize', resize);
+      resize();
+    }
+
+    function hexToCss(hex) {
+      return `#${(hex || 0xb7bcc0).toString(16).padStart(6, '0')}`;
+    }
+
+    function fallbackRotate(point) {
+      const cosY = Math.cos(fallback3D.rotY);
+      const sinY = Math.sin(fallback3D.rotY);
+      const cosX = Math.cos(fallback3D.rotX);
+      const sinX = Math.sin(fallback3D.rotX);
+      const x1 = point.x * cosY - point.z * sinY;
+      const z1 = point.x * sinY + point.z * cosY;
+      const y1 = point.y * cosX - z1 * sinX;
+      const z2 = point.y * sinX + z1 * cosX;
+      return { x: x1, y: y1, z: z2 };
+    }
+
+    function fallbackProject(point) {
+      const rotated = fallbackRotate(point);
+      const canvas = fallback3D.canvas;
+      const scale = Math.min(canvas.width, canvas.height) * .105 * fallback3D.zoom;
+      const perspective = 7 / (7 + rotated.z);
+      return {
+        x: canvas.width / 2 + rotated.x * scale * perspective,
+        y: canvas.height / 2 - rotated.y * scale * perspective,
+        depth: rotated.z
+      };
+    }
+
+    function fallbackPanels(profile, length) {
+      const panels = [];
+      for (let i = 0; i < profile.length - 1; i += 1) {
+        panels.push([
+          { x: -length / 2, y: profile[i].y, z: profile[i].z },
+          { x: length / 2, y: profile[i].y, z: profile[i].z },
+          { x: length / 2, y: profile[i + 1].y, z: profile[i + 1].z },
+          { x: -length / 2, y: profile[i + 1].y, z: profile[i + 1].z }
+        ]);
+      }
+      return panels;
+    }
+
+    function updateFallback3D() {
+      if (!fallback3D) return;
+      const ctx = fallback3D.ctx;
+      const canvas = fallback3D.canvas;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0d0d0d';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const sourcePoints = activeProfilePoints();
+      const validation = prepare3DProfile(sourcePoints);
+      const points = validation.points.length > 1 ? validation.points : cleanProfilePoints(sourcePoints);
+      const length = Math.min(7, Math.max(1.2, Number($('lengthTotal').value) || 2));
+      const profile = normalizedProfile(points);
+      const color = hexToCss(material3DColors[$('material').value] || 0xb7bcc0);
+      if (!validation.ok) {
+        ctx.strokeStyle = '#FF6B00';
+        ctx.lineWidth = 4 * (fallback3D.ratio || 1);
+        ctx.beginPath();
+        profile.map((point) => fallbackProject({ x: 0, y: point.y, z: point.z })).forEach((point, index) => {
+          if (index) ctx.lineTo(point.x, point.y);
+          else ctx.moveTo(point.x, point.y);
+        });
+        ctx.stroke();
+        show3DMessage(validation.reason || 'Le dessin 2D coté reste exploitable pour le devis.');
+        return;
+      }
+      const panels = validation.segments.map((segment) => [
+        { x: -length / 2, y: profile[segment.index].y, z: profile[segment.index].z },
+        { x: length / 2, y: profile[segment.index].y, z: profile[segment.index].z },
+        { x: length / 2, y: profile[segment.index + 1].y, z: profile[segment.index + 1].z },
+        { x: -length / 2, y: profile[segment.index + 1].y, z: profile[segment.index + 1].z }
+      ]).map((panel) => {
+        const projected = panel.map(fallbackProject);
+        return { projected, depth: projected.reduce((sum, point) => sum + point.depth, 0) / projected.length };
+      }).sort((a, b) => a.depth - b.depth);
+      panels.forEach((panel) => {
+        ctx.beginPath();
+        panel.projected.forEach((point, index) => {
+          if (index) ctx.lineTo(point.x, point.y);
+          else ctx.moveTo(point.x, point.y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.globalAlpha = .92;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = '#111111';
+        ctx.lineWidth = 2 * (fallback3D.ratio || 1);
+        ctx.stroke();
+      });
+      ctx.strokeStyle = '#FF6B00';
+      ctx.lineWidth = 2 * (fallback3D.ratio || 1);
+      profile.forEach((point) => {
+        const a = fallbackProject({ x: -length / 2, y: point.y, z: point.z });
+        const b = fallbackProject({ x: length / 2, y: point.y, z: point.z });
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      });
+      show3DMessage(validation.message || '');
+    }
+
+    function presetProfilePoints() {
+      const { A, B, C, D } = getDims();
+      const d = Math.max(0, D);
+      if (state.piece.id === 'couvertine') return [{ x: d, y: B - d }, { x: 0, y: B }, { x: 0, y: 0 }, { x: A, y: 0 }, { x: A, y: C }, { x: A - d, y: C - d }];
+      if (state.piece.id === 'bavette') return [{ x: 0, y: -B }, { x: 0, y: 0 }, { x: A, y: 0 }, { x: A, y: C }, { x: A - d, y: C - d }];
+      if (state.piece.id === 'solin') return [{ x: 45, y: 0 }, { x: 0, y: 45 }, { x: 0, y: B + 45 }, { x: A * .5, y: B + C }, { x: A * .5, y: B + C + 90 }, { x: A * .5 - d, y: B + C + 90 - d }];
+      if (state.piece.id === 'rive') return [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A * .42, y: B + C + A * .25 }, { x: A * .18, y: B + C + A * .25 }];
+      if (state.piece.id === 'cheneau') return [{ x: d, y: d }, { x: 0, y: 0 }, { x: 0, y: B }, { x: A * .72, y: B }, { x: A, y: Math.max(0, B - C) }, { x: A + d, y: Math.max(0, B - C) }];
+      if (state.piece.id === 'bande-rive') return [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A, y: B + C }, { x: A - d, y: B + C - d }];
+      if (state.piece.id === 'costiere') return [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A, y: B + C }];
+      if (state.piece.id === 'noue') return [{ x: 0, y: 0 }, { x: A / 2, y: B + C }, { x: A, y: 0 }];
+      return [{ x: 0, y: 0 }, { x: 0, y: B }, { x: A, y: B }];
+    }
+
+    function activeProfilePoints() {
+      return drawState.points.length > 1 ? drawState.points : cleanProfilePoints(presetProfilePoints());
+    }
+
+    function show3DMessage(message) {
+      const panel = $('viewerMessage');
+      if (!panel) return;
+      panel.textContent = message || '';
+      panel.classList.toggle('show', Boolean(message));
+    }
+
+    function normalizedProfile(points) {
+      const xs = points.map((point) => point.x);
+      const ys = points.map((point) => point.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const width = Math.max(1, maxX - minX);
+      const height = Math.max(1, maxY - minY);
+      const scale = 4 / Math.max(width, height);
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      return points.map((point) => ({ z: (point.x - centerX) * scale, y: -(point.y - centerY) * scale }));
+    }
+
+    function addProfileLine(points, material) {
+      const normalized = normalizedProfile(points);
+      const geometry = new THREE.BufferGeometry().setFromPoints(normalized.map((point) => new THREE.Vector3(0, point.y, point.z)));
+      shapeGroup.add(new THREE.Line(geometry, material));
+    }
+
+    function addExtrudedSegment(a, b, length, material, edgeMaterial) {
+      const vertices = new Float32Array([
+        -length / 2, a.y, a.z,
+        length / 2, a.y, a.z,
+        length / 2, b.y, b.z,
+        -length / 2, b.y, b.z
+      ]);
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+      geometry.setIndex([0, 1, 2, 0, 2, 3]);
+      geometry.computeVertexNormals();
+      shapeGroup.add(new THREE.Mesh(geometry, material));
+      shapeGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial));
+    }
+
+    function fit3DView() {
+      if (!camera || !controls || !shapeGroup || !shapeGroup.children.length) return;
+      const box = new THREE.Box3().setFromObject(shapeGroup);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+      const maxSize = Math.max(size.x, size.y, size.z, 1);
+      if (gridHelper) {
+        gridHelper.position.y = box.min.y - Math.max(.22, maxSize * .08);
+        gridHelper.scale.setScalar(Math.max(1, maxSize / 4.5));
+      }
+      const distanceToFit = (maxSize / (2 * Math.tan((camera.fov * Math.PI) / 360))) * 1.55;
+      camera.position.set(center.x + distanceToFit * .75, center.y + distanceToFit * .45, center.z + distanceToFit);
+      camera.near = Math.max(.01, distanceToFit / 100);
+      camera.far = distanceToFit * 100;
+      camera.updateProjectionMatrix();
+      controls.target.copy(center);
+      controls.update();
+    }
+
+    function update3DRobust() {
+      if (!window.THREE || !scene) return;
+      if (shapeGroup) scene.remove(shapeGroup);
+      shapeGroup = new THREE.Group();
+      const sourcePoints = activeProfilePoints();
+      const validation = prepare3DProfile(sourcePoints);
+      const points = validation.points.length > 1 ? validation.points : cleanProfilePoints(sourcePoints);
+      const length = Math.min(7, Math.max(1.2, Number($('lengthTotal').value) || 2));
+      const faceMaterial = new THREE.MeshStandardMaterial({
+        color: material3DColors[$('material').value] || 0xb7bcc0,
+        metalness: .52,
+        roughness: .35,
+        side: THREE.DoubleSide
+      });
+      const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x111111, linewidth: 1 });
+      const foldMaterial = new THREE.LineBasicMaterial({ color: 0xff6b00, linewidth: 1 });
+      if (!validation.ok) {
+        addProfileLine(points, foldMaterial);
+        scene.add(shapeGroup);
+        fit3DView();
+        show3DMessage(validation.reason || 'Le dessin 2D coté reste exploitable pour le devis.');
+        return;
+      }
+      const profile = normalizedProfile(points);
+      validation.segments.forEach((segment) => {
+        addExtrudedSegment(profile[segment.index], profile[segment.index + 1], length, faceMaterial, edgeMaterial);
+      });
+      profile.forEach((point) => {
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(-length / 2, point.y, point.z),
+          new THREE.Vector3(length / 2, point.y, point.z)
+        ]);
+        shapeGroup.add(new THREE.Line(geometry, foldMaterial));
+      });
+      shapeGroup.rotation.y = -.28;
+      scene.add(shapeGroup);
+      fit3DView();
+      show3DMessage(validation.message || '');
+    }
+
+    function update3D() {
+      if (!window.THREE || !scene) {
+        updateFallback3D();
+        return;
+      }
+      update3DRobust();
+      return;
+      if (shapeGroup) scene.remove(shapeGroup);
+      const { A, B, C, D } = getDims();
+      const length = Math.min(5.8, Math.max(2.2, Number($('lengthTotal').value) || 3));
+      const a = Math.min(2.8, Math.max(.7, A / 180));
+      const b = Math.min(1.6, Math.max(.25, B / 130));
+      const c = Math.min(1.6, Math.max(.25, C / 130));
+      const thickness = .045;
+      const material = new THREE.MeshStandardMaterial({
+        color: colorMap[$('color').value] || 0xff6b00,
+        metalness: .55,
+        roughness: .32
+      });
+      shapeGroup = new THREE.Group();
+      if (drawState.points.length > 1) {
+        const segments = drawingSegments();
+        const xs = drawState.points.map((point) => point.x);
+        const ys = drawState.points.map((point) => point.y);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+        const scale = 1 / Math.max(90, Math.max(maxX - minX, maxY - minY) / 4);
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+        segments.forEach((segment) => {
+          const segmentLength = Math.max(.12, segment.length * scale);
+          const panel = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, segmentLength), material);
+          const midX = ((segment.a.x + segment.b.x) / 2 - centerX) * scale;
+          const midY = ((segment.a.y + segment.b.y) / 2 - centerY) * scale;
+          panel.position.set(0, -midY, midX);
+          panel.rotation.x = Math.atan2(segment.b.y - segment.a.y, segment.b.x - segment.a.x) - Math.PI / 2;
+          shapeGroup.add(panel);
+        });
+        shapeGroup.rotation.y = -.35;
+        scene.add(shapeGroup);
+        return;
+      }
+      const top = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, a), material);
+      top.position.set(0, 0, 0);
+      const left = new THREE.Mesh(new THREE.BoxGeometry(length, b, thickness), material);
+      left.position.set(0, -b / 2, -a / 2);
+      const right = new THREE.Mesh(new THREE.BoxGeometry(length, c, thickness), material);
+      right.position.set(0, -c / 2, a / 2);
+      shapeGroup.add(top, left, right);
+      if (state.piece.id === 'couvertine') {
+        const lip = Math.min(.28, Math.max(.08, D / 80));
+        const leftLip = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, lip), material);
+        leftLip.position.set(0, -b + lip * .28, -a / 2 + lip / 2);
+        leftLip.rotation.x = -.75;
+        const rightLip = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, lip), material);
+        rightLip.position.set(0, -c + lip * .28, a / 2 - lip / 2);
+        rightLip.rotation.x = .75;
+        shapeGroup.add(leftLip, rightLip);
+      }
+      if (state.piece.id === 'bavette') {
+        shapeGroup.clear();
+        const flat = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, a), material);
+        flat.position.set(0, 0, 0);
+        const upstand = new THREE.Mesh(new THREE.BoxGeometry(length, b, thickness), material);
+        upstand.position.set(0, b / 2, -a / 2);
+        const drop = new THREE.Mesh(new THREE.BoxGeometry(length, c, thickness), material);
+        drop.position.set(0, -c / 2, a / 2);
+        const lip = Math.min(.42, Math.max(.12, D / 55));
+        const drip = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, lip), material);
+        drip.position.set(0, -c + lip * .18, a / 2 - lip / 2);
+        drip.rotation.x = .75;
+        shapeGroup.add(flat, upstand, drop, drip);
+      }
+      if (state.piece.id === 'solin') {
+        shapeGroup.clear();
+        const vertical = new THREE.Mesh(new THREE.BoxGeometry(length, b + c, thickness), material);
+        vertical.position.set(0, 0, 0);
+        const topReturn = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.62, Math.max(.28, a * .22))), material);
+        topReturn.position.set(0, (b + c) / 2, -.24);
+        topReturn.rotation.x = -.72;
+        const middleOffset = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(1.3, Math.max(.45, a * .45))), material);
+        middleOffset.position.set(0, .05, .36);
+        middleOffset.rotation.x = .28;
+        const lowerFold = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.62, Math.max(.28, a * .22))), material);
+        lowerFold.position.set(0, -(b + c) / 2, -.24);
+        lowerFold.rotation.x = -.72;
+        shapeGroup.add(vertical, topReturn, middleOffset, lowerFold);
+      }
+      if (state.piece.id === 'rive') {
+        shapeGroup.clear();
+        const drop = new THREE.Mesh(new THREE.BoxGeometry(length, b + c, thickness), material);
+        drop.position.set(0, 0, 0);
+        const nose = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.9, Math.max(.32, a * .3))), material);
+        nose.position.set(0, -(b + c) / 2 + .08, .24);
+        nose.rotation.x = .72;
+        const smallReturn = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.65, Math.max(.22, a * .22))), material);
+        smallReturn.position.set(0, -(b + c) / 2, -.12);
+        smallReturn.rotation.x = 0;
+        shapeGroup.add(drop, nose, smallReturn);
+      }
+      if (state.piece.id === 'cheneau') {
+        shapeGroup.clear();
+        const bottom = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, a), material);
+        bottom.position.set(0, -b / 2, 0);
+        const leftWall = new THREE.Mesh(new THREE.BoxGeometry(length, b, thickness), material);
+        leftWall.position.set(0, 0, -a / 2);
+        const leftReturn = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.55, Math.max(.22, a * .18))), material);
+        leftReturn.position.set(0, b / 2 - .04, -a / 2 + .18);
+        leftReturn.rotation.x = .72;
+        const rightWall = new THREE.Mesh(new THREE.BoxGeometry(length, c, thickness), material);
+        rightWall.position.set(0, -c / 4, a / 2 - .08);
+        rightWall.rotation.x = -.72;
+        const rightReturn = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.65, Math.max(.25, a * .2))), material);
+        rightReturn.position.set(0, c / 4 + .08, a / 2 + .18);
+        rightReturn.rotation.x = 0;
+        shapeGroup.add(bottom, leftWall, leftReturn, rightWall, rightReturn);
+      }
+      if (state.piece.id === 'bande-rive') {
+        shapeGroup.clear();
+        const vertical = new THREE.Mesh(new THREE.BoxGeometry(length, b + c, thickness), material);
+        vertical.position.set(0, 0, -a / 2);
+        const flat = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, a), material);
+        flat.position.set(0, -(b + c) / 2, 0);
+        const angledReturn = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, Math.min(.9, Math.max(.3, a * .28))), material);
+        angledReturn.position.set(0, -(b + c) / 2 + .24, a / 2 - .22);
+        angledReturn.rotation.x = -.78;
+        shapeGroup.add(vertical, flat, angledReturn);
+      }
+      if (state.piece.id === 'costiere') {
+        shapeGroup.clear();
+        const upstand = new THREE.Mesh(new THREE.BoxGeometry(length, b + c, thickness), material);
+        upstand.position.set(0, 0, -a / 2);
+        const base = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, a), material);
+        base.position.set(0, -(b + c) / 2, 0);
+        shapeGroup.add(upstand, base);
+      }
+      if (state.piece.id === 'noue') {
+        shapeGroup.clear();
+        const wing = Math.min(1.7, Math.max(.65, a * .42));
+        const leftWing = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, wing), material);
+        leftWing.position.set(0, 0, -wing * .35);
+        leftWing.rotation.x = -.62;
+        const rightWing = new THREE.Mesh(new THREE.BoxGeometry(length, thickness, wing), material);
+        rightWing.position.set(0, 0, wing * .35);
+        rightWing.rotation.x = .62;
+        shapeGroup.add(leftWing, rightWing);
+      }
+      shapeGroup.rotation.y = -.35;
+      scene.add(shapeGroup);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (controls) controls.update();
+      if (renderer) renderer.render(scene, camera);
+    }
+
+    function updateAll() {
+      renderDiagram();
+      calculate();
+      update3D();
+      $('summaryField').value = buildSummary();
+    }
+
+    function buildSummary() {
+      const { A, B, C, D } = getDims();
+      const calc = calculate();
+      return [
+        'Demande de faconnage sur mesure',
+        `Piece : ${state.piece.name}`,
+        `Dimensions : A ${A} mm / B ${B} mm / C ${C} mm / D ${D} mm`,
+        `Angles : ${getStandardAngles().map((angle, index) => `Angle ${index + 1} ${Math.round(angle)} deg`).join(' / ') || '-'}`,
+        `Developpe : ${Math.round(calc.developed)} mm`,
+        `Surface estimee : ${calc.surface.toFixed(2)} m2`,
+        `Poids estime : ${calc.weight.toFixed(2)} kg`,
+        `Matiere : ${$('material').value}`,
+        `Epaisseur : ${$('thickness').selectedOptions[0].textContent}`,
+        `Couleur : ${$('color').value}`,
+        `Longueur totale : ${calc.length} ml`,
+        `Quantite : ${calc.quantity}`,
+        `Client : ${$('clientName').value || '-'}`,
+        `Societe : ${$('company').value || '-'}`,
+        `Telephone : ${$('phone').value || '-'}`,
+        `Email : ${$('email').value || '-'}`,
+        `Adresse : ${$('address').value || '-'}`,
+        `Commentaire : ${$('comment').value || '-'}`,
+        '',
+        drawingTextSummary()
+      ].join('\\n');
+    }
+
+    function pdfEscape(text) {
+      return String(text).replace(/[éèêë]/g, 'e').replace(/[àâä]/g, 'a').replace(/[îï]/g, 'i').replace(/[ôö]/g, 'o').replace(/[ùûü]/g, 'u').replace(/[ç]/g, 'c').replace(/[€]/g, 'EUR').replace(/[()\\\\]/g, '\\\\$&');
+    }
+
+    function createPdfBlob() {
+      const lines = buildSummary().split('\\n');
+      const { A, B, C, D } = getDims();
+      let content = '0.95 0.95 0.95 rg 0 0 595 842 re f\\n';
+      content += '0.07 0.07 0.07 rg 38 760 519 48 re f\\n';
+      content += '1 0.42 0 rg 38 754 519 5 re f\\n';
+      content += 'BT /F1 22 Tf 55 780 Td (Couverture Malaise - Demande de faconnage) Tj ET\\n';
+      if (drawState.points.length > 1) {
+        const minX = Math.min(...drawState.points.map((point) => point.x));
+        const maxX = Math.max(...drawState.points.map((point) => point.x));
+        const minY = Math.min(...drawState.points.map((point) => point.y));
+        const maxY = Math.max(...drawState.points.map((point) => point.y));
+        const scale = Math.min(420 / Math.max(1, maxX - minX), 190 / Math.max(1, maxY - minY));
+        const pdfPoints = drawState.points.map((point) => ({ x: 88 + (point.x - minX) * scale, y: 650 - (point.y - minY) * scale }));
+        content += '0.07 0.07 0.07 RG 3 w ';
+        traceIndexBounds().forEach((bound) => {
+          const first = pdfPoints[bound.start];
+          if (!first) return;
+          content += `${first.x.toFixed(1)} ${first.y.toFixed(1)} m `;
+          for (let i = bound.start + 1; i <= bound.end; i += 1) {
+            const point = pdfPoints[i];
+            if (point) content += `${point.x.toFixed(1)} ${point.y.toFixed(1)} l `;
+          }
+        });
+        content += 'S\\n';
+        content += '1 0.42 0 RG 1.4 w ';
+        pdfPoints.forEach((point) => { content += `${(point.x - 2).toFixed(1)} ${(point.y - 2).toFixed(1)} 4 4 re S `; });
+        content += '\\n';
+        drawingSegments().forEach((segment, order) => {
+          const a = pdfPoints[segment.index];
+          const b = pdfPoints[segment.index + 1];
+          if (!a || !b) return;
+          const x = ((a.x + b.x) / 2 - 28).toFixed(1);
+          const y = ((a.y + b.y) / 2 + 14).toFixed(1);
+          content += `BT /F1 10 Tf ${x} ${y} Td (${pdfEscape(`${coteLabel(order)} = ${Math.round(segment.length)} mm`)}) Tj ET\\n`;
+        });
+        drawingAngles().forEach((item, order) => {
+          const point = pdfPoints[item.index];
+          if (!point) return;
+          content += `BT /F1 10 Tf ${(point.x + 10).toFixed(1)} ${(point.y - 16).toFixed(1)} Td (${pdfEscape(`${angleLabel(order)} = ${Math.round(item.angle)} deg`)}) Tj ET\\n`;
+        });
+      } else {
+        const profile = cleanProfilePoints(presetProfilePoints());
+        const minX = Math.min(...profile.map((point) => point.x));
+        const maxX = Math.max(...profile.map((point) => point.x));
+        const minY = Math.min(...profile.map((point) => point.y));
+        const maxY = Math.max(...profile.map((point) => point.y));
+        const scale = Math.min(420 / Math.max(1, maxX - minX), 190 / Math.max(1, maxY - minY));
+        const pdfPoints = profile.map((point) => ({ x: 88 + (point.x - minX) * scale, y: 650 - (point.y - minY) * scale }));
+        content += '1 0.42 0 RG 4 w ';
+        content += `${pdfPoints[0].x.toFixed(1)} ${pdfPoints[0].y.toFixed(1)} m `;
+        pdfPoints.slice(1).forEach((point) => { content += `${point.x.toFixed(1)} ${point.y.toFixed(1)} l `; });
+        content += 'S\\n';
+        content += `BT /F1 13 Tf 245 662 Td (A = ${A} mm) Tj ET\\n`;
+        content += `BT /F1 13 Tf 62 590 Td (B = ${B} mm) Tj ET\\n`;
+        content += `BT /F1 13 Tf 485 590 Td (C = ${C} mm) Tj ET\\n`;
+        if (D > 0) content += `BT /F1 13 Tf 245 500 Td (D = ${D} mm) Tj ET\\n`;
+      }
+      let y = 485;
+      lines.forEach((line) => {
+        content += `BT /F1 11 Tf 55 ${y} Td (${pdfEscape(line)}) Tj ET\\n`;
+        y -= 18;
+      });
+      const objects = [
+        '<< /Type /Catalog /Pages 2 0 R >>',
+        '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+        '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+        '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+        `<< /Length ${content.length} >>\\nstream\\n${content}\\nendstream`
+      ];
+      let pdf = '%PDF-1.4\\n';
+      const offsets = [0];
+      objects.forEach((object, index) => {
+        offsets.push(pdf.length);
+        pdf += `${index + 1} 0 obj\\n${object}\\nendobj\\n`;
+      });
+      const xref = pdf.length;
+      pdf += `xref\\n0 ${objects.length + 1}\\n0000000000 65535 f \\n`;
+      offsets.slice(1).forEach((offset) => { pdf += `${String(offset).padStart(10, '0')} 00000 n \\n`; });
+      pdf += `trailer << /Size ${objects.length + 1} /Root 1 0 R >>\\nstartxref\\n${xref}\\n%%EOF`;
+      return new Blob([pdf], { type: 'application/pdf' });
+    }
+
+    function downloadPdf() {
+      updateAll();
+      const blob = createPdfBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `demande-faconnage-${state.piece.id}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function setStatus(message) {
+      const status = $('formStatus');
+      status.textContent = message;
+      status.classList.add('show');
+    }
+
+    function updateFieldState(input) {
+      const field = input.closest('.field');
+      if (!field) return;
+      const invalid = !input.checkValidity();
+      field.classList.toggle('is-invalid', invalid);
+      input.setAttribute('aria-invalid', String(invalid));
+    }
+
+    function setCustomDrawingVisible(visible) {
+      const section = $('dessin-libre');
+      if (!section) return;
+      section.classList.toggle('is-hidden', !visible);
+      if (visible) setDrawingTool('draw');
+    }
+
+    function setupSimplifiedConfigurator() {
+      const advancedIds = [
+        'moveMode', 'mergeMode', 'lockMode', 'snapTolerance', 'undoDraw', 'redoDraw',
+        'deleteSegment', 'duplicateDraw', 'closeShape', 'zoomIn', 'zoomOut',
+        'panLeft', 'panUp', 'panDown', 'panRight', 'resetView',
+        'fullScreenDraw', 'exportPdfDraw'
+      ];
+      advancedIds.forEach((id) => $(id)?.classList.add('advanced-draw-tool'));
+      const showAdvancedButton = $('advancedDrawToggle');
+      showAdvancedButton?.addEventListener('click', () => {
+        const next = showAdvancedButton.getAttribute('aria-expanded') !== 'true';
+        showAdvancedButton.setAttribute('aria-expanded', String(next));
+        showAdvancedButton.textContent = next ? 'Masquer les options avancées' : 'Options avancées';
+        advancedIds.forEach((id) => $(id)?.classList.toggle('is-visible', next));
+      });
+      document.querySelectorAll('[data-config-mode]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const mode = button.dataset.configMode;
+          const target = mode === 'custom' ? $('dessin-libre') : $('choix-piece');
+          setCustomDrawingVisible(mode === 'custom');
+          target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+      setCustomDrawingVisible(location.hash === '#dessin-libre');
+    }
+
+    setupSimplifiedConfigurator();
+    renderPieces();
+    resetStandardAngles();
+    restoreDrawing();
+    renderDrawing();
+    updateAll();
+    ['dimA','dimB','dimC','dimD','stdAngle1','stdAngle2','stdAngle3','stdAngle4','material','thickness','color','lengthTotal','quantity','clientName','company','phone','email','address','comment'].forEach((id) => {
+      $(id).addEventListener('input', () => { updateAll(); renderDrawing(); });
+      $(id).addEventListener('change', () => { updateAll(); renderDrawing(); });
+    });
+    function handleProfilePointerMove(event) {
+      if (drawState.tool === 'sketch' && drawState.sketchDrawing) {
+        const point = getRawCanvasPoint(event);
+        drawState.cursorPoint = point;
+        const last = drawState.sketchPoints[drawState.sketchPoints.length - 1];
+        if (!last || distance(last, point) > 3) drawState.sketchPoints.push(point);
+        renderDrawing();
+        return;
+      }
+      if (drawState.draggingPointIndex !== null) {
+        const snap = findPointNearEvent(event);
+        const point = snap && snap.index !== drawState.draggingPointIndex ? { x: snap.point.x, y: snap.point.y } : getCanvasPoint(event);
+        drawState.cursorPoint = point;
+        drawState.hoveredPointIndex = snap?.index ?? null;
+        drawState.points[drawState.draggingPointIndex].x = point.x;
+        drawState.points[drawState.draggingPointIndex].y = point.y;
+        saveDrawing();
+        renderDrawing();
+        update3D();
+        return;
+      }
+      const snap = findPointNearEvent(event);
+      drawState.cursorPoint = snap ? { x: snap.point.x, y: snap.point.y } : getCanvasPoint(event);
+      drawState.hoveredPointIndex = snap?.index ?? null;
+      if (drawState.activePointIndex === null || !drawState.points[drawState.activePointIndex]) {
+        renderDrawing();
+        return;
+      }
+      const draft = snap ? { x: snap.point.x, y: snap.point.y } : applyLock(getCanvasPoint(event));
+      drawState.preview = draft;
+      renderDrawing();
+    }
+    $('profileCanvas').addEventListener('pointermove', handleProfilePointerMove);
+    $('profileCanvas').addEventListener('mousemove', handleProfilePointerMove);
+    $('profileCanvas').addEventListener('mouseleave', () => {
+      drawState.preview = null;
+      drawState.draggingPointIndex = null;
+      drawState.sketchDrawing = false;
+      drawState.hoveredPointIndex = null;
+      drawState.cursorPoint = null;
+      renderDrawing();
+    });
+    $('profileCanvas').addEventListener('pointerdown', (event) => {
+      if (drawState.tool === 'sketch') {
+        if (event.target.closest('[data-point], [data-seg], [data-angle]')) return;
+        event.preventDefault();
+        startSketch(event);
+        $('profileCanvas').setPointerCapture(event.pointerId);
+        return;
+      }
+      const pointNode = event.target.closest('[data-point]');
+      if (drawState.tool !== 'move' || !pointNode) return;
+      event.preventDefault();
+      pushDrawHistory();
+      drawState.draggingPointIndex = Number(pointNode.dataset.point);
+      drawState.activePointIndex = drawState.draggingPointIndex;
+      $('profileCanvas').setPointerCapture(event.pointerId);
+      renderDrawing();
+    });
+    $('profileCanvas').addEventListener('pointerup', () => {
+      if (drawState.tool === 'sketch' && drawState.sketchDrawing) {
+        finishSketch();
+        return;
+      }
+      if (drawState.draggingPointIndex === null) return;
+      drawState.draggingPointIndex = null;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    });
+    $('profileCanvas').addEventListener('mousedown', (event) => {
+      if (drawState.tool !== 'sketch') return;
+      if (event.target.closest('[data-point], [data-seg], [data-angle]')) return;
+      event.preventDefault();
+      startSketch(event);
+    });
+    window.addEventListener('mouseup', () => {
+      if (drawState.tool === 'sketch') finishSketch();
+    });
+    $('profileCanvas').addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+      const segmentNode = event.target.closest('[data-seg]');
+      if (segmentNode && drawState.activeType === 'segment' && drawState.activeIndex === Number(segmentNode.dataset.seg)) {
+        deleteSegment(Number(segmentNode.dataset.seg));
+        return;
+      }
+      if (segmentNode) {
+        setActiveReference('segment', Number(segmentNode.dataset.seg));
+        return;
+      }
+      endCurrentTrace();
+    });
+    $('profileCanvas').addEventListener('click', (event) => {
+      if (drawState.sketchJustFinished) return;
+      const pointNode = event.target.closest('[data-point]');
+      if (pointNode) {
+        const index = Number(pointNode.dataset.point);
+        if (drawState.tool === 'merge') {
+          if (drawState.mergePointIndex === null) {
+            drawState.mergePointIndex = index;
+            drawState.activePointIndex = index;
+            renderDrawing();
+          } else {
+            mergePoints(drawState.mergePointIndex, index);
+          }
+          return;
+        }
+        selectPoint(index);
+        return;
+      }
+      const label = event.target.closest('[data-seg], [data-angle]');
+      if (label?.dataset.seg) {
+        const index = Number(label.dataset.seg);
+        drawState.activeType = 'segment';
+        drawState.activeIndex = index;
+        editSegmentLength(index);
+        return;
+      }
+      if (label?.dataset.angle) {
+        const index = Number(label.dataset.angle);
+        drawState.activeType = 'angle';
+        drawState.activeIndex = index;
+        editAngle(index);
+        return;
+      }
+      if (drawState.tool !== 'draw') return;
+      const snap = findPointNearEvent(event);
+      if (snap) {
+        if (drawState.activePointIndex === null || drawState.activePointIndex === snap.index) {
+          selectPoint(snap.index);
+          return;
+        }
+        if (canCloseOnPoint(snap.index)) {
+          selectPoint(snap.index);
+          return;
+        }
+        addDrawingPoint({ x: snap.point.x, y: snap.point.y });
+        return;
+      }
+      addDrawingPoint(applyLock(getCanvasPoint(event)));
+    });
+    $('segmentList').addEventListener('click', (event) => {
+      const segmentButton = event.target.closest('[data-seg]');
+      if (segmentButton) {
+        const index = Number(segmentButton.dataset.seg);
+        drawState.activeType = 'segment';
+        drawState.activeIndex = index;
+        editSegmentLength(index);
+        return;
+      }
+      const angleButton = event.target.closest('[data-angle]');
+      if (angleButton) {
+        const index = Number(angleButton.dataset.angle);
+        drawState.activeType = 'angle';
+        drawState.activeIndex = index;
+        editAngle(index);
+      }
+    });
+    $('segmentList').addEventListener('focusin', (event) => {
+      const segmentInput = event.target.closest('[data-seg-input]');
+      if (segmentInput) {
+        drawState.activeType = 'segment';
+        drawState.activeIndex = Number(segmentInput.dataset.segInput);
+        return;
+      }
+      const angleInput = event.target.closest('[data-angle-input]');
+      if (angleInput) {
+        drawState.activeType = 'angle';
+        drawState.activeIndex = Number(angleInput.dataset.angleInput);
+      }
+    });
+    $('segmentList').addEventListener('input', (event) => {
+      const segmentInput = event.target.closest('[data-seg-input]');
+      const angleInput = event.target.closest('[data-angle-input]');
+      if (!segmentInput && !angleInput) return;
+      drawState.lockReferenceList = true;
+      if (segmentInput) {
+        applySegmentLength(Number(segmentInput.dataset.segInput), segmentInput.value, { live: true });
+      } else {
+        applyAngle(Number(angleInput.dataset.angleInput), angleInput.value, { live: true });
+      }
+      drawState.lockReferenceList = false;
+    });
+    $('segmentList').addEventListener('change', (event) => {
+      const segmentInput = event.target.closest('[data-seg-input]');
+      if (segmentInput) {
+        applySegmentLength(Number(segmentInput.dataset.segInput), segmentInput.value);
+        return;
+      }
+      const angleInput = event.target.closest('[data-angle-input]');
+      if (angleInput) {
+        applyAngle(Number(angleInput.dataset.angleInput), angleInput.value);
+      }
+    });
+    $('segmentList').addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      const segmentInput = event.target.closest('[data-seg-input]');
+      if (segmentInput) {
+        event.preventDefault();
+        applySegmentLength(Number(segmentInput.dataset.segInput), segmentInput.value);
+        return;
+      }
+      const angleInput = event.target.closest('[data-angle-input]');
+      if (angleInput) {
+        event.preventDefault();
+        applyAngle(Number(angleInput.dataset.angleInput), angleInput.value);
+      }
+    });
+    $('undoDraw').addEventListener('click', undoDrawing);
+    $('redoDraw').addEventListener('click', redoDrawing);
+    $('drawMode').addEventListener('click', () => setDrawingTool('draw'));
+    $('sketchMode').addEventListener('click', () => setDrawingTool('sketch'));
+    $('moveMode').addEventListener('click', () => setDrawingTool('move'));
+    $('mergeMode').addEventListener('click', () => setDrawingTool('merge'));
+    $('snapTolerance').addEventListener('change', renderDrawing);
+    $('correctSketch').addEventListener('click', correctSketchToProfile);
+    $('editDimensions').addEventListener('click', () => {
+      document.querySelector('#segmentList')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    $('generate3D').addEventListener('click', () => {
+      update3D();
+      document.querySelector('#apercu')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('exportPdfDraw').addEventListener('click', downloadPdf);
+    $('deleteSegment').addEventListener('click', () => {
+      const segment = drawState.activeType === 'segment' ? segmentByIndex(drawState.activeIndex) : drawingSegments().slice(-1)[0];
+      if (segment) deleteSegment(segment.index);
+    });
+    $('duplicateDraw').addEventListener('click', () => {
+      if (!drawState.points.length) return;
+      pushDrawHistory();
+      const copy = drawState.points.map((point) => ({ x: point.x + 60, y: point.y + 60, breakBefore: Boolean(point.breakBefore) }));
+      drawState.points = copy;
+      drawState.activePointIndex = drawState.points.length - 1;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    });
+    $('closeShape').addEventListener('click', () => {
+      const bounds = traceIndexBounds();
+      const activeBound = bounds.find((bound) => drawState.activePointIndex >= bound.start && drawState.activePointIndex <= bound.end) || bounds[bounds.length - 1];
+      if (!activeBound || activeBound.end - activeBound.start < 2) return;
+      const first = drawState.points[activeBound.start];
+      const last = drawState.points[activeBound.end];
+      if (distance(first, last) < 1) return;
+      pushDrawHistory();
+      drawState.points.push({ x: first.x, y: first.y });
+      drawState.activePointIndex = drawState.points.length - 1;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    });
+    $('resetDraw').addEventListener('click', () => {
+      if (!confirm('Réinitialiser le dessin libre ?')) return;
+      pushDrawHistory();
+      drawState.points = [];
+      drawState.preview = null;
+      drawState.activeType = null;
+      drawState.activeIndex = null;
+      drawState.activePointIndex = null;
+      drawState.mergePointIndex = null;
+      drawState.sketchPoints = [];
+      drawState.lastSketchPoints = [];
+      drawState.sketchDrawing = false;
+      saveDrawing();
+      renderDrawing();
+      update3D();
+    });
+    $('zoomIn').addEventListener('click', () => {
+      drawState.viewBox.x += drawState.viewBox.w * .1;
+      drawState.viewBox.y += drawState.viewBox.h * .1;
+      drawState.viewBox.w *= .8;
+      drawState.viewBox.h *= .8;
+      renderDrawing();
+    });
+    $('zoomOut').addEventListener('click', () => {
+      drawState.viewBox.x -= drawState.viewBox.w * .125;
+      drawState.viewBox.y -= drawState.viewBox.h * .125;
+      drawState.viewBox.w *= 1.25;
+      drawState.viewBox.h *= 1.25;
+      renderDrawing();
+    });
+    $('panLeft').addEventListener('click', () => { drawState.viewBox.x -= drawState.viewBox.w * .12; renderDrawing(); });
+    $('panRight').addEventListener('click', () => { drawState.viewBox.x += drawState.viewBox.w * .12; renderDrawing(); });
+    $('panUp').addEventListener('click', () => { drawState.viewBox.y -= drawState.viewBox.h * .12; renderDrawing(); });
+    $('panDown').addEventListener('click', () => { drawState.viewBox.y += drawState.viewBox.h * .12; renderDrawing(); });
+    $('resetView').addEventListener('click', () => {
+      drawState.viewBox = { x: 0, y: 0, w: 900, h: 460 };
+      renderDrawing();
+    });
+    $('reset3DView').addEventListener('click', () => {
+      if (fallback3D) {
+        fallback3D.rotX = -.28;
+        fallback3D.rotY = .72;
+        fallback3D.zoom = 1;
+        updateFallback3D();
+      } else {
+        fit3DView();
+      }
+    });
+    $('fullScreenDraw').addEventListener('click', () => {
+      const stage = $('drawStage');
+      if (!document.fullscreenElement && stage.requestFullscreen) stage.requestFullscreen();
+      else if (document.exitFullscreen) document.exitFullscreen();
+    });
+    window.addEventListener('keydown', (event) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target?.tagName)) return;
+      if (event.key === 'Escape') {
+        endCurrentTrace();
+      }
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        const segment = drawState.activeType === 'segment' ? segmentByIndex(drawState.activeIndex) : null;
+        if (segment) {
+          event.preventDefault();
+          deleteSegment(segment.index);
+        }
+      }
+    });
+    $('downloadPdf').addEventListener('click', downloadPdf);
+    $('copySummary').addEventListener('click', async () => {
+      updateAll();
+      await navigator.clipboard.writeText(buildSummary());
+      setStatus('Récapitulatif copié. Vous pouvez aussi générer le PDF.');
+    });
+    document.querySelector('.config-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      form.classList.add('was-submitted');
+      form.querySelectorAll('[required]').forEach(updateFieldState);
+      const firstInvalid = form.querySelector('[required]:invalid');
+      if (firstInvalid) {
+        firstInvalid.focus();
+        setStatus('Merci de compléter les champs obligatoires en rouge.');
+        return;
+      }
+      updateAll();
+      const formData = new FormData(form);
+      formData.append('Dossier PDF', new File([createPdfBlob()], 'demande-faconnage.pdf', { type: 'application/pdf' }));
+      const attachments = $('attachments').files;
+      Array.from(attachments).forEach((file, index) => formData.append(`Document client ${index + 1}`, file));
+      if (location.protocol === 'file:') {
+        downloadPdf();
+        setStatus('PDF généré. L’envoi automatique fonctionnera lorsque les variables email seront configurées sur Vercel.');
+        return;
+      }
+      try {
+        const response = await fetch('/api/demande', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Erreur envoi');
+        window.location.href = 'merci.html';
+      } catch (error) {
+        downloadPdf();
+        setStatus('La demande n’a pas pu être envoyée automatiquement. Le PDF a été généré pour garder le récapitulatif.');
+      }
+    });
+    window.addEventListener('load', init3D);
+  </script>
+</body>
+</html>
