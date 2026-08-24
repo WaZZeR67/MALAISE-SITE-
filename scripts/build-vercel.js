@@ -8,7 +8,9 @@ const allowedFiles = new Set([
   "index.html",
   "drone.html",
   "configurateur-faconnage.html",
-  "merci.html"
+  "merci.html",
+  "robots.txt",
+  "sitemap.xml"
 ]);
 
 function copyDir(source, target) {

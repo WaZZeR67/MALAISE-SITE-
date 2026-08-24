@@ -23,6 +23,7 @@
       font-family: Inter, Arial, sans-serif;
       color: var(--white);
       background: var(--black);
+      overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
     button, input, select, textarea { font: inherit; }
@@ -187,6 +188,17 @@
       border-color: rgba(255,107,0,.72);
       background: rgba(255,107,0,.18);
     }
+    .tool-btn.primary-action {
+      border-color: rgba(255,107,0,.78);
+      background: var(--orange);
+      color: var(--white);
+      box-shadow: 0 12px 26px rgba(255,107,0,.22);
+    }
+    .tool-btn.danger-action {
+      border-color: rgba(255,80,80,.5);
+      color: #fff;
+      background: rgba(180,35,35,.38);
+    }
     .draw-stage {
       position: relative;
       min-height: 540px;
@@ -206,6 +218,25 @@
       cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 25 25'%3E%3Cpath d='M12.5 1v23M1 12.5h23' stroke='%23000' stroke-width='1.6' stroke-linecap='round'/%3E%3Ccircle cx='12.5' cy='12.5' r='2.2' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") 12 12, crosshair;
       touch-action: none;
       background: #fbfbfb;
+    }
+    .technical-dim line,
+    .technical-angle path,
+    .technical-extension {
+      vector-effect: non-scaling-stroke;
+    }
+    .technical-dim text,
+    .technical-angle text,
+    .technical-id text {
+      font-family: Inter, Arial, sans-serif;
+      paint-order: stroke;
+      stroke: #fbfbfb;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+    .technical-dim.active text,
+    .technical-angle.active text,
+    .technical-id.active text {
+      stroke: rgba(255,107,0,.18);
     }
     .draw-help {
       position: absolute;
@@ -513,7 +544,7 @@
     }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255,107,0,.14); }
     .field.is-invalid label { color: #ff9b9b; }
-    .field.is-invalid input {
+    .field.is-invalid input, .field.is-invalid select, .field.is-invalid textarea {
       border-color: #ff3b30;
       box-shadow: 0 0 0 4px rgba(255,59,48,.16);
     }
@@ -600,10 +631,15 @@
       line-height: 1.45;
     }
     .status.show { display: block; }
+    .btn[disabled] { cursor: wait; opacity: .68; transform: none; }
     .footer { padding: 42px 0; color: rgba(255,255,255,.62); background: #0b0b0b; }
-    .footer .container { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer .container { display: grid; grid-template-columns: 1.1fr .9fr .8fr; gap: 24px; }
+    .footer h3 { color: var(--white); font-size: 17px; }
+    .footer p { margin: 0; }
+    .footer ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .footer a:hover { color: var(--orange-2); }
     @media (max-width: 980px) {
-      .piece-grid, .workbench, .viewer-grid, .draw-layout, .mode-grid { grid-template-columns: 1fr; }
+      .piece-grid, .workbench, .viewer-grid, .draw-layout, .mode-grid, .footer .container { grid-template-columns: 1fr; }
       .progress { grid-template-columns: repeat(2, 1fr); }
       .navlinks a:not(.btn) { display: none; }
     }
@@ -702,8 +738,16 @@
         <div class="draw-layout">
           <div class="panel">
             <div class="draw-toolbar" aria-label="Outils de dessin">
-              <button class="tool-btn active" type="button" id="drawMode">Dessiner ma pièce</button>
-              <button class="tool-btn" type="button" id="sketchMode">Transformer mon croquis</button>
+              <button class="tool-btn active primary-action" type="button" id="drawMode">Dessiner</button>
+              <button class="tool-btn" type="button" id="undoDraw">Annuler</button>
+              <button class="tool-btn" type="button" id="redoDraw">Refaire</button>
+              <button class="tool-btn danger-action" type="button" id="correctSketch">Effacer tout</button>
+              <button class="tool-btn" type="button" id="closeShape">Terminer le dessin</button>
+              <button class="tool-btn" type="button" id="editDimensions">Modifier les mesures</button>
+              <button class="tool-btn" type="button" id="generate3D">Aperçu 3D</button>
+              <a class="tool-btn primary-action" href="#demande" style="display:inline-flex;align-items:center;text-decoration:none">Envoyer la demande</a>
+              <button class="tool-btn" type="button" id="advancedDrawToggle" aria-expanded="false">Options avancées</button>
+              <button class="tool-btn" type="button" id="sketchMode">Croquis libre</button>
               <button class="tool-btn" type="button" id="moveMode">Déplacer</button>
               <button class="tool-btn" type="button" id="mergeMode">Fusionner</button>
               <select class="tool-select" id="lockMode" aria-label="Verrouillage angle">
@@ -718,16 +762,9 @@
                 <option value="10" selected>Snap 10 px normal</option>
                 <option value="20">Snap 20 px facile</option>
               </select>
-              <button class="tool-btn" type="button" id="undoDraw">Annuler</button>
-              <button class="tool-btn" type="button" id="redoDraw">Rétablir</button>
-              <button class="tool-btn" type="button" id="correctSketch">Nettoyer le croquis</button>
-              <button class="tool-btn" type="button" id="editDimensions">Régler les mesures</button>
-              <button class="tool-btn" type="button" id="generate3D">Voir l’aperçu 3D</button>
               <button class="tool-btn" type="button" id="resetDraw">Effacer le dessin</button>
-              <button class="tool-btn" type="button" id="advancedDrawToggle" aria-expanded="false">Options avancées</button>
               <button class="tool-btn" type="button" id="deleteSegment">Supprimer segment</button>
               <button class="tool-btn" type="button" id="duplicateDraw">Dupliquer</button>
-              <button class="tool-btn" type="button" id="closeShape">Fermer</button>
               <button class="tool-btn" type="button" id="zoomIn">Zoom +</button>
               <button class="tool-btn" type="button" id="zoomOut">Zoom -</button>
               <button class="tool-btn" type="button" id="panLeft">←</button>
@@ -737,7 +774,6 @@
               <button class="tool-btn" type="button" id="resetView">Vue initiale</button>
               <button class="tool-btn" type="button" id="fullScreenDraw">Plein écran</button>
               <button class="tool-btn" type="button" id="exportPdfDraw">Exporter PDF</button>
-              <a class="tool-btn" href="#demande" style="display:inline-flex;align-items:center;text-decoration:none">Envoyer la demande</a>
             </div>
             <div class="draw-stage" id="drawStage">
               <svg id="profileCanvas" viewBox="0 0 900 460" role="img" aria-label="Éditeur de dessin 2D"></svg>
@@ -883,8 +919,26 @@
 
   <footer class="footer">
     <div class="container">
-      <span>Couverture Malaisé - Façonnage sur mesure en Bas-Rhin</span>
-      <a href="mailto:toiture@malaise.fr">toiture@malaise.fr</a>
+      <div>
+        <h3>Couverture Malaisé</h3>
+        <p>Configurateur de façonnage sur mesure pour pièces de zinguerie, couvertines, solins, chéneaux et profils personnalisés.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="tel:+33388679220">03 88 67 92 20</a></li>
+          <li><a href="mailto:toiture@malaise.fr">toiture@malaise.fr</a></li>
+          <li>Erstein-Krafft, Bas-Rhin</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Liens utiles</h3>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="drone.html">Inspection drone</a></li>
+          <li><a href="index.html#contact">Demander un devis toiture</a></li>
+        </ul>
+      </div>
     </div>
   </footer>
 
@@ -905,7 +959,7 @@
     const density = { 'Zinc': 7140, 'Aluminium': 2700, 'Acier galvanisé': 7850, 'Acier laqué': 7850, 'Cuivre': 8960 };
     const colorMap = { Blanc: 0xf4f4f4, Anthracite: 0x30343a, Noir: 0x111111, Brun: 0x5b3a2e, Gris: 0x8e8e8e, Autre: 0xff6b00 };
     const material3DColors = { Zinc: 0xb7bcc0, Aluminium: 0xd9dde0, 'Acier galvanisé': 0x9da4aa, 'Acier laqué': 0x30343a, Cuivre: 0xb87333 };
-    const state = { piece: pieces[0], dims: { A: 210, B: 35, C: 35, D: 10 }, angles: [45, 90, 90, 45] };
+    const state = { piece: pieces[0], dims: { A: 210, B: 35, C: 35, D: 10 }, angles: [45, 90, 90, 45], activeStandardFocus: null };
     const $ = (id) => document.getElementById(id);
     const drawState = {
       points: [],
@@ -927,7 +981,8 @@
       lastSketchPoints: [],
       sketchDrawing: false,
       sketchJustFinished: false,
-      lockReferenceList: false
+      lockReferenceList: false,
+      fitRequested: false
     };
 
     function clonePoints(points = drawState.points) {
@@ -964,6 +1019,29 @@
       $('profileCanvas').setAttribute('viewBox', `${box.x} ${box.y} ${box.w} ${box.h}`);
     }
 
+    function clientPointFromEvent(event) {
+      const source = event.touches?.[0] || event.changedTouches?.[0] || event;
+      return { x: source.clientX, y: source.clientY };
+    }
+
+    function eventToSvgPoint(event) {
+      const svg = $('profileCanvas');
+      const client = clientPointFromEvent(event);
+      if (svg.createSVGPoint && svg.getScreenCTM()) {
+        const point = svg.createSVGPoint();
+        point.x = client.x;
+        point.y = client.y;
+        const transformed = point.matrixTransform(svg.getScreenCTM().inverse());
+        return { x: transformed.x, y: transformed.y };
+      }
+      const rect = svg.getBoundingClientRect();
+      const box = drawState.viewBox;
+      return {
+        x: box.x + ((client.x - rect.left) / rect.width) * box.w,
+        y: box.y + ((client.y - rect.top) / rect.height) * box.h
+      };
+    }
+
     function snapValue(value) {
       return Math.round(value / drawState.snap) * drawState.snap;
     }
@@ -973,27 +1051,22 @@
     }
 
     function getCanvasPoint(event) {
-      const svg = $('profileCanvas');
-      const rect = svg.getBoundingClientRect();
-      const box = drawState.viewBox;
-      return snapPoint({
-        x: box.x + ((event.clientX - rect.left) / rect.width) * box.w,
-        y: box.y + ((event.clientY - rect.top) / rect.height) * box.h
-      });
+      return snapPoint(eventToSvgPoint(event));
     }
 
     function getRawCanvasPoint(event) {
-      const svg = $('profileCanvas');
-      const rect = svg.getBoundingClientRect();
-      const box = drawState.viewBox;
-      return {
-        x: box.x + ((event.clientX - rect.left) / rect.width) * box.w,
-        y: box.y + ((event.clientY - rect.top) / rect.height) * box.h
-      };
+      return eventToSvgPoint(event);
     }
 
     function canvasToScreen(point) {
       const svg = $('profileCanvas');
+      if (svg.createSVGPoint && svg.getScreenCTM()) {
+        const svgPoint = svg.createSVGPoint();
+        svgPoint.x = point.x;
+        svgPoint.y = point.y;
+        const screen = svgPoint.matrixTransform(svg.getScreenCTM());
+        return { x: screen.x, y: screen.y };
+      }
       const rect = svg.getBoundingClientRect();
       const box = drawState.viewBox;
       return {
@@ -1027,6 +1100,35 @@
       const svg = $('profileCanvas');
       const rect = svg.getBoundingClientRect();
       return pointSnapTolerance() * (drawState.viewBox.w / Math.max(1, rect.width));
+    }
+
+    function fitDrawingToView(points) {
+      const usable = points.filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y));
+      if (!usable.length) {
+        drawState.viewBox = { x: 0, y: 0, w: 900, h: 460 };
+        return;
+      }
+      const xs = usable.map((point) => point.x);
+      const ys = usable.map((point) => point.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const width = Math.max(120, maxX - minX);
+      const height = Math.max(80, maxY - minY);
+      const margin = Math.max(70, Math.min(160, Math.max(width, height) * .28));
+      const targetRatio = 900 / 460;
+      let boxW = width + margin * 2;
+      let boxH = height + margin * 2;
+      const currentRatio = boxW / boxH;
+      if (currentRatio > targetRatio) {
+        boxH = boxW / targetRatio;
+      } else {
+        boxW = boxH * targetRatio;
+      }
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+      drawState.viewBox = { x: cx - boxW / 2, y: cy - boxH / 2, w: boxW, h: boxH };
     }
 
     function findPointNearCanvasPoint(point) {
@@ -1197,6 +1299,7 @@
       drawState.preview = null;
       drawState.draggingPointIndex = null;
       drawState.mergePointIndex = null;
+      drawState.fitRequested = true;
       renderDrawing();
     }
 
@@ -1291,6 +1394,33 @@
       renderDrawing();
     }
 
+    function resetFreeDrawing(options = {}) {
+      if (options.confirm && !confirm('Effacer complètement le croquis ?')) return false;
+      if (options.history) pushDrawHistory();
+      drawState.points = [];
+      drawState.preview = null;
+      drawState.activeType = null;
+      drawState.activeIndex = null;
+      drawState.activePointIndex = null;
+      drawState.draggingPointIndex = null;
+      drawState.mergePointIndex = null;
+      drawState.hoveredPointIndex = null;
+      drawState.cursorPoint = null;
+      drawState.sketchPoints = [];
+      drawState.lastSketchPoints = [];
+      drawState.sketchDrawing = false;
+      drawState.sketchJustFinished = false;
+      drawState.tool = 'draw';
+      drawState.fitRequested = false;
+      drawState.viewBox = { x: 0, y: 0, w: 900, h: 460 };
+      try { localStorage.removeItem('malaise-faconnage-dessin-v1'); } catch (error) {}
+      setDrawingTool('draw');
+      saveDrawing();
+      renderDrawing();
+      update3D();
+      return true;
+    }
+
     function drawingReferenceListHtml() {
       const segments = drawingSegments();
       const angles = drawingAngles();
@@ -1320,6 +1450,67 @@
         </div>`;
       }).join('');
       return `<div class="list-title">Cotes</div>${segmentItems}<div class="list-title">Angles</div>${angleInputItems || '<p class="notice">Aucun angle pour le moment.</p>'}`;
+    }
+
+    function unitVector(a, b) {
+      const len = distance(a, b) || 1;
+      return { x: (b.x - a.x) / len, y: (b.y - a.y) / len, len };
+    }
+
+    function profileCenter(points) {
+      if (!points.length) return { x: 0, y: 0 };
+      return {
+        x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+        y: points.reduce((sum, point) => sum + point.y, 0) / points.length
+      };
+    }
+
+    function technicalDimensionSvg(segment, order, center, options = {}) {
+      const active = Boolean(options.active);
+      const label = options.label || coteLabel(order).replace('Cote ', '');
+      const value = options.value ?? Math.round(segment.length ?? distance(segment.a, segment.b));
+      const field = options.field || '';
+      const u = unitVector(segment.a, segment.b);
+      let normal = { x: -u.y, y: u.x };
+      const mid = { x: (segment.a.x + segment.b.x) / 2, y: (segment.a.y + segment.b.y) / 2 };
+      if ((mid.x - center.x) * normal.x + (mid.y - center.y) * normal.y < 0) normal = { x: -normal.x, y: -normal.y };
+      const offset = options.offset ?? (34 + (order % 2) * 10);
+      const p1 = { x: segment.a.x + normal.x * offset, y: segment.a.y + normal.y * offset };
+      const p2 = { x: segment.b.x + normal.x * offset, y: segment.b.y + normal.y * offset };
+      const labelPoint = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+      const text = `${Math.round(value)} mm`;
+      const width = Math.max(58, text.length * 7.4 + 16);
+      return `<g class="technical-dim ${active ? 'active' : ''}" data-seg="${segment.index ?? order}" data-focus="${field}" style="cursor:pointer">
+        <line class="technical-extension" x1="${segment.a.x}" y1="${segment.a.y}" x2="${p1.x}" y2="${p1.y}" stroke="${active ? '#FF6B00' : 'rgba(17,17,17,.35)'}" stroke-width="1.4"/>
+        <line class="technical-extension" x1="${segment.b.x}" y1="${segment.b.y}" x2="${p2.x}" y2="${p2.y}" stroke="${active ? '#FF6B00' : 'rgba(17,17,17,.35)'}" stroke-width="1.4"/>
+        <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${active ? '#FF6B00' : 'rgba(17,17,17,.68)'}" stroke-width="${active ? 2.4 : 1.7}"/>
+        <circle cx="${p1.x}" cy="${p1.y}" r="2.6" fill="${active ? '#FF6B00' : '#111'}"/>
+        <circle cx="${p2.x}" cy="${p2.y}" r="2.6" fill="${active ? '#FF6B00' : '#111'}"/>
+        <rect x="${labelPoint.x - width / 2}" y="${labelPoint.y - 13}" width="${width}" height="22" rx="4" fill="#fbfbfb" stroke="${active ? '#FF6B00' : 'rgba(17,17,17,.18)'}" stroke-width="${active ? 2 : 1}"/>
+        <text x="${labelPoint.x}" y="${labelPoint.y + 3.6}" fill="#111" font-size="12" font-weight="850" text-anchor="middle">${text}</text>
+        <circle cx="${labelPoint.x - width / 2 - 13}" cy="${labelPoint.y - 2}" r="10" fill="${active ? '#FF6B00' : '#111'}"/>
+        <text x="${labelPoint.x - width / 2 - 13}" y="${labelPoint.y + 2}" fill="#fff" stroke="none" font-size="10" font-weight="900" text-anchor="middle">${label}</text>
+      </g>`;
+    }
+
+    function technicalAngleSvg(prev, vertex, next, order, value, active = false, dataIndex = order, field = '') {
+      const v1 = unitVector(vertex, prev);
+      const v2 = unitVector(vertex, next);
+      const radius = 28 + (order % 2) * 7;
+      const p1 = { x: vertex.x + v1.x * radius, y: vertex.y + v1.y * radius };
+      const p2 = { x: vertex.x + v2.x * radius, y: vertex.y + v2.y * radius };
+      const cross = v1.x * v2.y - v1.y * v2.x;
+      const sweep = cross > 0 ? 1 : 0;
+      const bisector = { x: v1.x + v2.x, y: v1.y + v2.y };
+      const bLen = Math.hypot(bisector.x, bisector.y) || 1;
+      const labelPoint = { x: vertex.x + (bisector.x / bLen) * (radius + 24), y: vertex.y + (bisector.y / bLen) * (radius + 24) };
+      const text = `${Math.round(value)}°`;
+      const width = Math.max(44, text.length * 7.4 + 16);
+      return `<g class="technical-angle ${active ? 'active' : ''}" data-angle="${dataIndex}" data-focus="${field}" style="cursor:pointer">
+        <path d="M ${p1.x} ${p1.y} A ${radius} ${radius} 0 0 ${sweep} ${p2.x} ${p2.y}" fill="none" stroke="${active ? '#FF6B00' : 'rgba(17,17,17,.55)'}" stroke-width="${active ? 2.4 : 1.6}"/>
+        <rect x="${labelPoint.x - width / 2}" y="${labelPoint.y - 13}" width="${width}" height="22" rx="11" fill="#fbfbfb" stroke="${active ? '#FF6B00' : 'rgba(17,17,17,.14)'}" stroke-width="${active ? 2 : 1}"/>
+        <text x="${labelPoint.x}" y="${labelPoint.y + 3.8}" fill="#111" font-size="12" font-weight="850" text-anchor="middle">${text}</text>
+      </g>`;
     }
 
     function drawingTraceGroups() {
@@ -1515,6 +1706,11 @@
     function renderDrawing() {
       const svg = $('profileCanvas');
       if (!svg) return;
+      const fitPoints = drawState.points.concat(drawState.sketchPoints, drawState.preview ? [drawState.preview] : []);
+      if (drawState.fitRequested || !fitPoints.length) {
+        fitDrawingToView(fitPoints);
+        drawState.fitRequested = false;
+      }
       setCanvasViewBox();
       normalizeActiveReference();
       const points = drawState.points;
@@ -1527,24 +1723,16 @@
       const sketchPoint = drawState.sketchPoints[drawState.sketchPoints.length - 1];
       const sketchCross = sketchPoint ? pointCross(sketchPoint, { size: 13, width: 2.8 }) : '';
       const cursorCross = drawState.cursorPoint && !drawState.sketchDrawing ? pointCross(drawState.cursorPoint, { size: 11, width: 2, opacity: .7 }) : '';
+      const center = profileCenter(points);
       const segmentLines = segments.map((segment) => {
         const active = drawState.activeType === 'segment' && drawState.activeIndex === segment.index;
         const hit = `<line data-seg="${segment.index}" x1="${segment.a.x}" y1="${segment.a.y}" x2="${segment.b.x}" y2="${segment.b.y}" stroke="transparent" stroke-width="28" stroke-linecap="round" style="cursor:pointer"/>`;
-        const visible = `<line x1="${segment.a.x}" y1="${segment.a.y}" x2="${segment.b.x}" y2="${segment.b.y}" stroke="${active ? '#FF6B00' : '#111'}" stroke-width="${active ? 9 : 5}" stroke-linecap="square" pointer-events="none"/>`;
+        const visible = `<line x1="${segment.a.x}" y1="${segment.a.y}" x2="${segment.b.x}" y2="${segment.b.y}" stroke="${active ? '#FF6B00' : '#111'}" stroke-width="${active ? 6 : 4}" stroke-linecap="square" pointer-events="none" vector-effect="non-scaling-stroke"/>`;
         return `${hit}${visible}`;
       }).join('');
       const segmentLabels = segments.map((segment, order) => {
-        const x = (segment.a.x + segment.b.x) / 2;
-        const y = (segment.a.y + segment.b.y) / 2 - 12;
         const active = drawState.activeType === 'segment' && drawState.activeIndex === segment.index;
-        const label = `${coteLabel(segment.index)} · ${Math.round(segment.length)} mm`;
-        const displayLabel = label.replace(coteLabel(segment.index), coteLabel(order));
-        const width = Math.max(116, displayLabel.length * 7.2);
-        return `<g data-seg="${segment.index}" class="measure-label" style="cursor:pointer"><rect x="${x - width / 2}" y="${y - 18}" width="${width}" height="25" rx="4" fill="${active ? '#FF6B00' : '#111'}"/><text x="${x}" y="${y}" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">${displayLabel}</text></g>`;
-      }).join('');
-      const angleLabels = angles.map((item) => {
-        const label = `${Math.round(item.angle)}°`;
-        return `<g data-angle="${item.index}" class="angle-label" style="cursor:pointer"><circle cx="${item.point.x + 30}" cy="${item.point.y + 24}" r="18" fill="rgba(255,107,0,.95)"/><text x="${item.point.x + 30}" y="${item.point.y + 29}" fill="#fff" font-size="12" font-weight="900" text-anchor="middle">${label}</text></g>`;
+        return technicalDimensionSvg(segment, order, center, { active, label: coteLabel(order).replace('Cote ', '') });
       }).join('');
       const pointDots = points.map((point, index) => {
         const active = drawState.activePointIndex === index || drawState.draggingPointIndex === index || drawState.mergePointIndex === index;
@@ -1552,19 +1740,13 @@
         const closeTarget = hovered && canCloseOnPoint(index);
         const endpoint = isTraceStart(index) || isTraceEnd(index);
         const fill = closeTarget ? '#24b36b' : active || hovered ? '#FF6B00' : endpoint ? '#fff' : '#111';
-        const label = isTraceStart(index) ? 'D' : isTraceEnd(index) ? 'F' : '';
-        const halo = active ? `<circle cx="${point.x}" cy="${point.y}" r="16" fill="none" stroke="#FF6B00" stroke-width="3" opacity=".38"/>` : '';
+        const halo = active ? `<circle cx="${point.x}" cy="${point.y}" r="13" fill="none" stroke="#FF6B00" stroke-width="2.2" opacity=".38" vector-effect="non-scaling-stroke"/>` : '';
         const cross = (active || hovered || closeTarget) ? pointCross(point, { stroke: closeTarget ? '#24b36b' : '#FF6B00', size: 13, width: 2.6 }) : '';
-        const selectedText = active ? `<text x="${point.x + 20}" y="${point.y - 16}" fill="#FF6B00" font-size="12" font-weight="900">Point sélectionné</text>` : '';
-        return `<g data-point="${index}" style="cursor:${drawState.tool === 'move' ? 'grab' : 'pointer'}"><circle cx="${point.x}" cy="${point.y}" r="20" fill="transparent"/>${halo}<circle cx="${point.x}" cy="${point.y}" r="${endpoint || hovered ? 8 : 5}" fill="${fill}" stroke="${closeTarget ? '#24b36b' : '#FF6B00'}" stroke-width="${active || hovered ? 4 : 2}"/>${cross}${label ? `<text x="${point.x}" y="${point.y + 4}" fill="${active || hovered ? '#111' : '#FF6B00'}" font-size="9" font-weight="900" text-anchor="middle">${label}</text>` : ''}${selectedText}</g>`;
+        return `<g data-point="${index}" style="cursor:${drawState.tool === 'move' ? 'grab' : 'pointer'}"><circle cx="${point.x}" cy="${point.y}" r="18" fill="transparent"/>${halo}<circle cx="${point.x}" cy="${point.y}" r="${endpoint || hovered ? 5.5 : 4}" fill="${fill}" stroke="${closeTarget ? '#24b36b' : '#FF6B00'}" stroke-width="${active || hovered ? 2.6 : 1.8}" vector-effect="non-scaling-stroke"/>${cross}</g>`;
       }).join('');
       const numberedAngleLabels = angles.map((item, order) => {
         const active = drawState.activeType === 'angle' && drawState.activeIndex === item.index;
-        const label = `${angleLabel(order)} · ${Math.round(item.angle)}°`;
-        const x = item.point.x + 45;
-        const y = item.point.y + 26;
-        const width = Math.max(112, label.length * 7.1);
-        return `<g data-angle="${item.index}" class="angle-label" style="cursor:pointer"><rect x="${x - width / 2}" y="${y - 18}" width="${width}" height="25" rx="13" fill="${active ? '#111' : 'rgba(255,107,0,.95)'}" stroke="#FF6B00" stroke-width="${active ? 3 : 0}"/><text x="${x}" y="${y}" fill="#fff" font-size="12" font-weight="900" text-anchor="middle">${label}</text></g>`;
+        return technicalAngleSvg(points[item.index - 1], item.point, points[item.index + 1], order, item.angle, active, item.index);
       }).join('');
       svg.innerHTML = `
         <defs>
@@ -1606,10 +1788,14 @@
         alert.classList.remove('show');
       }
       $('drawHelp').textContent = drawState.tool === 'sketch'
-        ? 'Dessinez librement à la souris ou au doigt, puis cliquez sur Corriger le croquis.'
+        ? 'Croquis libre : tracez au doigt ou à la souris. Utilisez Effacer tout pour repartir de zéro.'
         : drawState.hoveredPointIndex !== null
-          ? 'Point détecté : cliquez pour vous accrocher exactement dessus.'
-          : drawState.activePointIndex !== null ? 'Cliquez pour créer le prochain segment. Clic droit ou Échap : terminer le tracé. Cliquez sur une cote ou un trait pour modifier la mesure.' : 'Cliquez où vous voulez pour démarrer un nouveau tracé, ou cliquez un point existant pour reprendre depuis ce point. Cliquez sur une cote ou un trait pour modifier la mesure.';
+          ? 'Point détecté : cliquez pour reprendre exactement depuis ce point.'
+          : !drawState.points.length
+            ? 'Étape 1 : cliquez pour poser votre premier point.'
+            : drawState.activePointIndex !== null
+              ? 'Étape 2 : cliquez ailleurs pour créer la prochaine longueur. Clic droit ou Échap : terminer.'
+              : 'Étape 3 : cliquez sur une cote ou un angle pour le modifier, ou cliquez dans la grille pour démarrer un nouveau profil.';
       if (drawState.points.length) {
         const validation = validateProfile(drawState.points, { allowIncomplete: true, ignoreIntersections: true, ignoreAngles: true });
         if (!validation.ok) {
@@ -1647,6 +1833,7 @@
         drawState.points[i].x += dx;
         drawState.points[i].y += dy;
       }
+      drawState.fitRequested = true;
       saveDrawing();
       renderDrawing();
       update3D();
@@ -1689,6 +1876,7 @@
         drawState.points[i].x = vertex.x + px * cos - py * sin;
         drawState.points[i].y = vertex.y + px * sin + py * cos;
       }
+      drawState.fitRequested = true;
       saveDrawing();
       renderDrawing();
       update3D();
@@ -1779,6 +1967,7 @@
       if (!drawState.history.length) return;
       drawState.future.push(clonePoints());
       drawState.points = drawState.history.pop();
+      drawState.fitRequested = true;
       saveDrawing();
       renderDrawing();
       update3D();
@@ -1788,6 +1977,7 @@
       if (!drawState.future.length) return;
       drawState.history.push(clonePoints());
       drawState.points = drawState.future.pop();
+      drawState.fitRequested = true;
       saveDrawing();
       renderDrawing();
       update3D();
@@ -1865,7 +2055,7 @@
       return state.dims;
     }
 
-    function profileAngles(points = cleanProfilePoints(presetProfilePoints())) {
+    function profileAngles(points = cleanProfilePoints(presetProfilePoints(false))) {
       const list = [];
       for (let i = 1; i < points.length - 1; i += 1) {
         const angle = angleBetween(points[i - 1], points[i], points[i + 1]);
@@ -1875,7 +2065,7 @@
     }
 
     function resetStandardAngles() {
-      state.angles = profileAngles();
+      state.angles = profileAngles(cleanProfilePoints(presetProfilePoints(false)));
       for (let i = 1; i <= 4; i += 1) {
         const input = $(`stdAngle${i}`);
         if (!input) continue;
@@ -1975,52 +2165,36 @@
       return labels.filter((label) => label.name !== 'D' || Number(label.value) > 0);
     }
 
-    function dimensionCallouts() {
-      const { A, B, C, D } = getDims();
-      const items = [
-        { key: 'A', field: 'dimA', value: A, x: 288, y: 20 },
-        { key: 'B', field: 'dimB', value: B, x: 42, y: 158 },
-        { key: 'C', field: 'dimC', value: C, x: 536, y: 158 },
-        { key: 'D', field: 'dimD', value: D, x: 288, y: 300 }
-      ].filter((item) => item.key !== 'D' || Number(item.value) > 0);
-      return items.map((item) => `
-        <foreignObject x="${item.x}" y="${item.y}" width="44" height="44"><button class="dim-click" data-focus="${item.field}">${item.key}</button></foreignObject>
-      `).join('');
+    function standardDimensionSegments(mapped) {
+      const labels = segmentLengthLabels(mapped);
+      const center = profileCenter(mapped);
+      return labels.map((label, index) => {
+        const field = `dim${label.name}`;
+        if (!$(field)) return '';
+        const segment = { index, a: mapped[index], b: mapped[index + 1], length: distance(mapped[index], mapped[index + 1]) };
+        return technicalDimensionSvg(segment, index, center, {
+          label: label.name,
+          value: label.value,
+          field,
+          active: state.activeStandardFocus === field,
+          offset: 38 + (index % 2) * 10
+        });
+      }).join('');
     }
 
-    function diagramAngleCallouts(points) {
+    function diagramAngleCallouts(mapped) {
       const values = getStandardAngles();
-      const positions = [
-        { x: 88, y: 78 },
-        { x: 410, y: 78 },
-        { x: 88, y: 258 },
-        { x: 410, y: 258 }
-      ];
-      const angles = [];
-      for (let i = 1; i < points.length - 1; i += 1) {
-        const angle = angleBetween(points[i - 1].source || points[i - 1], points[i].source || points[i], points[i + 1].source || points[i + 1]);
-        if (!Number.isFinite(angle) || angle <= 2 || angle >= 178) continue;
-        const order = angles.length;
-        const position = positions[order] || { x: 18 + order * 120, y: 314 };
-        const value = values[order] || Math.round(angle);
-        angles.push(`<foreignObject x="${x}" y="${y}" width="84" height="30"><span class="angle-chip">${Math.round(angle)}°</span></foreignObject>`);
-      }
-      return angles.join('');
-    }
-
-    function diagramAngleCallouts(points) {
-      const values = getStandardAngles();
-      const positions = [
-        { x: 82, y: 78 },
-        { x: 412, y: 78 },
-        { x: 82, y: 258 },
-        { x: 412, y: 258 }
-      ];
-      const angleCount = Math.min(profileAngles(points.map((point) => point.source || point)).length, 4);
-      return Array.from({ length: angleCount }).map((_, index) => {
-        const position = positions[index] || { x: 18 + index * 120, y: 314 };
-        const value = values[index] || profileAngles()[index] || 90;
-        return `<foreignObject x="${position.x}" y="${position.y}" width="132" height="34"><button class="angle-chip" data-focus="stdAngle${index + 1}">Angle ${index + 1} · ${Math.round(value)}°</button></foreignObject>`;
+      let order = 0;
+      return mapped.slice(1, -1).map((point, index) => {
+        const realIndex = index + 1;
+        const rawAngle = angleBetween(mapped[realIndex - 1].source || mapped[realIndex - 1], mapped[realIndex].source || mapped[realIndex], mapped[realIndex + 1].source || mapped[realIndex + 1]);
+        if (!Number.isFinite(rawAngle) || rawAngle <= 2 || rawAngle >= 178) return '';
+        const field = `stdAngle${order + 1}`;
+        const value = values[order] || Math.round(rawAngle);
+        const active = state.activeStandardFocus === field;
+        const svg = technicalAngleSvg(mapped[realIndex - 1], point, mapped[realIndex + 1], order, value, active, order, field);
+        order += 1;
+        return svg;
       }).join('');
     }
 
@@ -2029,24 +2203,32 @@
       const profile = cleanProfilePoints(presetProfilePoints()).filter((point, index, list) => index === 0 || distance(point, list[index - 1]) > 1);
       const mapped = mapProfileToSvg(profile);
       const path = svgPathFromPoints(mapped);
-      const points = mapped.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="5" fill="#111" stroke="#FF6B00" stroke-width="2"/>`).join('');
-      const dimCallouts = dimensionCallouts();
+      const points = mapped.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="4.5" fill="#fbfbfb" stroke="#111" stroke-width="1.6" vector-effect="non-scaling-stroke"/>`).join('');
+      const dimCallouts = standardDimensionSegments(mapped);
       const angleCallouts = diagramAngleCallouts(mapped);
       svg.innerHTML = `
         <defs>
           <filter id="glow"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#FF6B00" flood-opacity=".22"/></filter>
         </defs>
-        <path d="${path}" stroke="rgba(255,255,255,.18)" stroke-width="18" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
-        <path d="${path}" stroke="#FF6B00" stroke-width="7" fill="none" stroke-linecap="square" stroke-linejoin="miter" filter="url(#glow)"/>
-        ${points}
-        ${angleCallouts}
+        <path d="${path}" stroke="rgba(17,17,17,.10)" stroke-width="14" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path d="${path}" stroke="#111" stroke-width="5.5" fill="none" stroke-linecap="square" stroke-linejoin="miter" filter="url(#glow)" vector-effect="non-scaling-stroke"/>
         ${dimCallouts}
+        ${angleCallouts}
+        ${points}
       `;
-      svg.querySelectorAll('.dim-click, .dim-chip, .angle-chip').forEach((button) => {
+      svg.querySelectorAll('[data-focus]').forEach((button) => {
         button.addEventListener('click', () => {
           const field = $(button.dataset.focus);
           field.focus();
           field.select?.();
+        });
+        button.addEventListener('mouseenter', () => {
+          state.activeStandardFocus = button.dataset.focus;
+          renderDiagram();
+        });
+        button.addEventListener('mouseleave', () => {
+          state.activeStandardFocus = document.activeElement?.id || null;
+          renderDiagram();
         });
       });
       svg.classList.remove('dim-updated');
@@ -2250,18 +2432,48 @@
       show3DMessage(validation.message || '');
     }
 
-    function presetProfilePoints() {
+    function applyStandardAnglesToProfile(points, angleValues = getStandardAngles()) {
+      const nextPoints = points.map((point) => ({ x: point.x, y: point.y, breakBefore: Boolean(point.breakBefore) }));
+      let angleOrder = 0;
+      for (let i = 1; i < nextPoints.length - 1 && angleOrder < angleValues.length; i += 1) {
+        const target = Number(angleValues[angleOrder]);
+        if (!Number.isFinite(target)) continue;
+        const prev = nextPoints[i - 1];
+        const vertex = nextPoints[i];
+        const next = nextPoints[i + 1];
+        const base = Math.atan2(prev.y - vertex.y, prev.x - vertex.x);
+        const current = Math.atan2(next.y - vertex.y, next.x - vertex.x);
+        const cross = (prev.x - vertex.x) * (next.y - vertex.y) - (prev.y - vertex.y) * (next.x - vertex.x);
+        const sign = cross >= 0 ? 1 : -1;
+        const targetDirection = base + sign * Math.min(179, Math.max(1, target)) * Math.PI / 180;
+        const delta = targetDirection - current;
+        const cos = Math.cos(delta);
+        const sin = Math.sin(delta);
+        for (let j = i + 1; j < nextPoints.length; j += 1) {
+          const px = nextPoints[j].x - vertex.x;
+          const py = nextPoints[j].y - vertex.y;
+          nextPoints[j].x = vertex.x + px * cos - py * sin;
+          nextPoints[j].y = vertex.y + px * sin + py * cos;
+        }
+        angleOrder += 1;
+      }
+      return nextPoints;
+    }
+
+    function presetProfilePoints(applyAngles = true) {
       const { A, B, C, D } = getDims();
       const d = Math.max(0, D);
-      if (state.piece.id === 'couvertine') return [{ x: d, y: B - d }, { x: 0, y: B }, { x: 0, y: 0 }, { x: A, y: 0 }, { x: A, y: C }, { x: A - d, y: C - d }];
-      if (state.piece.id === 'bavette') return [{ x: 0, y: -B }, { x: 0, y: 0 }, { x: A, y: 0 }, { x: A, y: C }, { x: A - d, y: C - d }];
-      if (state.piece.id === 'solin') return [{ x: 45, y: 0 }, { x: 0, y: 45 }, { x: 0, y: B + 45 }, { x: A * .5, y: B + C }, { x: A * .5, y: B + C + 90 }, { x: A * .5 - d, y: B + C + 90 - d }];
-      if (state.piece.id === 'rive') return [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A * .42, y: B + C + A * .25 }, { x: A * .18, y: B + C + A * .25 }];
-      if (state.piece.id === 'cheneau') return [{ x: d, y: d }, { x: 0, y: 0 }, { x: 0, y: B }, { x: A * .72, y: B }, { x: A, y: Math.max(0, B - C) }, { x: A + d, y: Math.max(0, B - C) }];
-      if (state.piece.id === 'bande-rive') return [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A, y: B + C }, { x: A - d, y: B + C - d }];
-      if (state.piece.id === 'costiere') return [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A, y: B + C }];
-      if (state.piece.id === 'noue') return [{ x: 0, y: 0 }, { x: A / 2, y: B + C }, { x: A, y: 0 }];
-      return [{ x: 0, y: 0 }, { x: 0, y: B }, { x: A, y: B }];
+      let profile;
+      if (state.piece.id === 'couvertine') profile = [{ x: d, y: B - d }, { x: 0, y: B }, { x: 0, y: 0 }, { x: A, y: 0 }, { x: A, y: C }, { x: A - d, y: C - d }];
+      else if (state.piece.id === 'bavette') profile = [{ x: 0, y: -B }, { x: 0, y: 0 }, { x: A, y: 0 }, { x: A, y: C }, { x: A - d, y: C - d }];
+      else if (state.piece.id === 'solin') profile = [{ x: Math.max(20, D), y: 0 }, { x: 0, y: Math.max(20, D) }, { x: 0, y: B + D }, { x: A * .5, y: B + C }, { x: A * .5, y: B + C + A * .45 }, { x: A * .5 - d, y: B + C + A * .45 - d }];
+      else if (state.piece.id === 'rive') profile = [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A * .42, y: B + C + A * .25 }, { x: A * .18, y: B + C + A * .25 }];
+      else if (state.piece.id === 'cheneau') profile = [{ x: d, y: d }, { x: 0, y: 0 }, { x: 0, y: B }, { x: A * .72, y: B }, { x: A, y: Math.max(0, B - C) }, { x: A + d, y: Math.max(0, B - C) }];
+      else if (state.piece.id === 'bande-rive') profile = [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A, y: B + C }, { x: A - d, y: B + C - d }];
+      else if (state.piece.id === 'costiere') profile = [{ x: 0, y: 0 }, { x: 0, y: B + C }, { x: A, y: B + C }];
+      else if (state.piece.id === 'noue') profile = [{ x: 0, y: 0 }, { x: A / 2, y: B + C }, { x: A, y: 0 }];
+      else profile = [{ x: 0, y: 0 }, { x: 0, y: B }, { x: A, y: B }];
+      return applyAngles ? applyStandardAnglesToProfile(profile) : profile;
     }
 
     function activeProfilePoints() {
@@ -2684,10 +2896,10 @@
 
     function setupSimplifiedConfigurator() {
       const advancedIds = [
-        'moveMode', 'mergeMode', 'lockMode', 'snapTolerance', 'undoDraw', 'redoDraw',
-        'deleteSegment', 'duplicateDraw', 'closeShape', 'zoomIn', 'zoomOut',
+        'sketchMode', 'moveMode', 'mergeMode', 'lockMode', 'snapTolerance',
+        'deleteSegment', 'duplicateDraw', 'zoomIn', 'zoomOut',
         'panLeft', 'panUp', 'panDown', 'panRight', 'resetView',
-        'fullScreenDraw', 'exportPdfDraw'
+        'fullScreenDraw', 'exportPdfDraw', 'resetDraw'
       ];
       advancedIds.forEach((id) => $(id)?.classList.add('advanced-draw-tool'));
       const showAdvancedButton = $('advancedDrawToggle');
@@ -2715,8 +2927,18 @@
     renderDrawing();
     updateAll();
     ['dimA','dimB','dimC','dimD','stdAngle1','stdAngle2','stdAngle3','stdAngle4','material','thickness','color','lengthTotal','quantity','clientName','company','phone','email','address','comment'].forEach((id) => {
-      $(id).addEventListener('input', () => { updateAll(); renderDrawing(); });
-      $(id).addEventListener('change', () => { updateAll(); renderDrawing(); });
+      const input = $(id);
+      input.addEventListener('input', () => { updateAll(); renderDrawing(); });
+      input.addEventListener('change', () => { updateAll(); renderDrawing(); });
+      if (id.startsWith('dim') || id.startsWith('stdAngle')) {
+        input.addEventListener('focus', () => { state.activeStandardFocus = id; renderDiagram(); });
+        input.addEventListener('mouseenter', () => { state.activeStandardFocus = id; renderDiagram(); });
+        input.addEventListener('mouseleave', () => {
+          state.activeStandardFocus = document.activeElement?.id?.startsWith('dim') || document.activeElement?.id?.startsWith('stdAngle') ? document.activeElement.id : null;
+          renderDiagram();
+        });
+        input.addEventListener('blur', () => { state.activeStandardFocus = null; renderDiagram(); });
+      }
     });
     function handleProfilePointerMove(event) {
       if (drawState.tool === 'sketch' && drawState.sketchDrawing) {
@@ -2933,7 +3155,7 @@
     $('moveMode').addEventListener('click', () => setDrawingTool('move'));
     $('mergeMode').addEventListener('click', () => setDrawingTool('merge'));
     $('snapTolerance').addEventListener('change', renderDrawing);
-    $('correctSketch').addEventListener('click', correctSketchToProfile);
+    $('correctSketch').addEventListener('click', () => resetFreeDrawing({ confirm: true, history: true }));
     $('editDimensions').addEventListener('click', () => {
       document.querySelector('#segmentList')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
@@ -2957,34 +3179,10 @@
       update3D();
     });
     $('closeShape').addEventListener('click', () => {
-      const bounds = traceIndexBounds();
-      const activeBound = bounds.find((bound) => drawState.activePointIndex >= bound.start && drawState.activePointIndex <= bound.end) || bounds[bounds.length - 1];
-      if (!activeBound || activeBound.end - activeBound.start < 2) return;
-      const first = drawState.points[activeBound.start];
-      const last = drawState.points[activeBound.end];
-      if (distance(first, last) < 1) return;
-      pushDrawHistory();
-      drawState.points.push({ x: first.x, y: first.y });
-      drawState.activePointIndex = drawState.points.length - 1;
-      saveDrawing();
-      renderDrawing();
-      update3D();
+      endCurrentTrace();
     });
     $('resetDraw').addEventListener('click', () => {
-      if (!confirm('Réinitialiser le dessin libre ?')) return;
-      pushDrawHistory();
-      drawState.points = [];
-      drawState.preview = null;
-      drawState.activeType = null;
-      drawState.activeIndex = null;
-      drawState.activePointIndex = null;
-      drawState.mergePointIndex = null;
-      drawState.sketchPoints = [];
-      drawState.lastSketchPoints = [];
-      drawState.sketchDrawing = false;
-      saveDrawing();
-      renderDrawing();
-      update3D();
+      resetFreeDrawing({ confirm: true, history: true });
     });
     $('zoomIn').addEventListener('click', () => {
       drawState.viewBox.x += drawState.viewBox.w * .1;
@@ -3054,6 +3252,11 @@
         return;
       }
       updateAll();
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Envoi en cours...';
+      }
       const formData = new FormData(form);
       formData.append('Dossier PDF', new File([createPdfBlob()], 'demande-faconnage.pdf', { type: 'application/pdf' }));
       const attachments = $('attachments').files;
@@ -3061,6 +3264,10 @@
       if (location.protocol === 'file:') {
         downloadPdf();
         setStatus('PDF généré. L’envoi automatique fonctionnera lorsque les variables email seront configurées sur Vercel.');
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Envoyer ma demande de devis';
+        }
         return;
       }
       try {
@@ -3070,6 +3277,10 @@
       } catch (error) {
         downloadPdf();
         setStatus('La demande n’a pas pu être envoyée automatiquement. Le PDF a été généré pour garder le récapitulatif.');
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Envoyer ma demande de devis';
+        }
       }
     });
     window.addEventListener('load', init3D);

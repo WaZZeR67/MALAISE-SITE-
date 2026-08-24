@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
+  <meta name="description" content="Confirmation d'envoi de demande pour Couverture Malaisé.">
   <title>Demande envoyée | Couverture Malaisé</title>
   <style>
     :root {
@@ -49,7 +50,13 @@
       color: var(--muted);
       font-size: 18px;
       line-height: 1.7;
-      margin: 22px 0 32px;
+      margin: 22px 0;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
     }
     a {
       display: inline-flex;
@@ -64,6 +71,25 @@
       text-decoration: none;
       box-shadow: 0 14px 34px rgba(255, 107, 0, .26);
     }
+    a.secondary {
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      box-shadow: none;
+    }
+    .contact {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .contact a {
+      min-height: auto;
+      padding: 0;
+      color: var(--white);
+      background: transparent;
+      box-shadow: none;
+    }
   </style>
 </head>
 <body>
@@ -71,7 +97,14 @@
     <p class="eyebrow">Couverture Malaisé</p>
     <h1>Demande envoyée.</h1>
     <p>Merci pour votre message. Nous revenons vers vous pour échanger sur votre projet et organiser une visite si nécessaire.</p>
-    <a href="index.html">Retour au site</a>
+    <div class="contact">
+      <div>Téléphone : <a href="tel:+33388679220">03 88 67 92 20</a></div>
+      <div>Email : <a href="mailto:toiture@malaise.fr">toiture@malaise.fr</a></div>
+    </div>
+    <div class="actions">
+      <a href="index.html">Retour au site</a>
+      <a class="secondary" href="configurateur-faconnage.html">Configurateur façonnage</a>
+    </div>
   </main>
 </body>
 </html>

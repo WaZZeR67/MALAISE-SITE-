@@ -10,9 +10,8 @@
   <meta property="og:title" content="Couverture Malaisé | 3 générations au service de votre toiture">
   <meta property="og:description" content="Couverture, zinguerie, étanchéité, isolation et inspection drone en Alsace. Entreprise créée en 1976, avec 50 ans d'expérience au service des toitures du Bas-Rhin.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1600">
+  <meta property="og:image" content="assets/logo-malaise.jpg">
   <link rel="preconnect" href="https://images.pexels.com">
-  <link rel="preconnect" href="https://unsplash.com">
   <link rel="preconnect" href="https://www.google.com">
   <style>
     :root {
@@ -297,9 +296,20 @@
       overflow: hidden;
       border-radius: var(--radius);
       background:
-        linear-gradient(180deg, rgba(17,17,17,0), rgba(17,17,17,.82)),
-        url("https://unsplash.com/photos/ZzZouwiQWV0/download?force=true") center / cover;
+        linear-gradient(180deg, rgba(17,17,17,.06), rgba(17,17,17,.86)),
+        linear-gradient(135deg, rgba(255,107,0,.2), rgba(255,255,255,.04) 42%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,.12) 0 2px, transparent 2px 28px),
+        #1b1b1b;
       box-shadow: var(--shadow);
+    }
+    .story-media::before {
+      content: "";
+      position: absolute;
+      inset: 14% 10%;
+      border-top: 4px solid rgba(255,107,0,.72);
+      border-left: 4px solid rgba(255,255,255,.18);
+      transform: skewY(-12deg);
+      box-shadow: 0 26px 0 rgba(255,255,255,.08), 0 52px 0 rgba(255,255,255,.05);
     }
     .story-badge {
       position: absolute;
@@ -740,24 +750,41 @@
     .ba-side {
       position: absolute;
       inset: 0;
-      background-position: center;
-      background-size: cover;
       transition: width .42s ease;
+    }
+    .ba-side::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 46px 18px auto 18px;
+      display: grid;
+      min-height: 92px;
+      place-items: center;
+      border: 1px dashed rgba(255,255,255,.3);
+      border-radius: var(--radius);
+      color: rgba(255,255,255,.76);
+      background: rgba(17,17,17,.42);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
     }
     .ba-before {
       width: 100%;
       filter: grayscale(.78) contrast(.92) brightness(.72);
-      background-image:
-        linear-gradient(180deg, rgba(17,17,17,.08), rgba(17,17,17,.44)),
-        var(--before);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.02) 42%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 1px, transparent 1px 16px),
+        #1c1c1c;
     }
     .ba-after {
       right: 0;
       left: auto;
       width: 52%;
-      background-image:
-        linear-gradient(180deg, rgba(17,17,17,0), rgba(17,17,17,.2)),
-        var(--after);
+      background:
+        linear-gradient(135deg, rgba(255,107,0,.24), rgba(255,255,255,.04) 48%),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,.09) 0 1px, transparent 1px 16px),
+        #242424;
       box-shadow: -16px 0 35px rgba(0,0,0,.22);
     }
     .ba-card:hover .ba-after { width: 68%; }
@@ -930,9 +957,17 @@
     .detail-photo {
       min-height: 260px;
       border-radius: var(--radius);
-      background: var(--photo) center / cover;
+      background:
+        var(--photo, linear-gradient(135deg, rgba(255,107,0,.2), rgba(255,255,255,.04) 48%)),
+        repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 1px, transparent 1px 18px),
+        #1c1c1c;
       overflow: hidden;
       position: relative;
+    }
+    .detail-photo.empty {
+      display: grid;
+      place-items: center;
+      border: 1px dashed rgba(255,255,255,.26);
     }
     .detail-photo:first-child {
       min-height: 536px;
@@ -1162,6 +1197,21 @@
     .form.was-submitted .field.is-invalid select {
       border-color: #ff3b30;
       box-shadow: 0 0 0 4px rgba(255,59,48,.16);
+    }
+    .form-status {
+      grid-column: 1 / -1;
+      min-height: 22px;
+      margin: 0;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      font-weight: 760;
+    }
+    .form-status.error { color: #ff6b6b; }
+    .form-status.success { color: #7ee08a; }
+    .btn[disabled] {
+      cursor: wait;
+      opacity: .68;
+      transform: none;
     }
     .map {
       height: 420px;
@@ -1454,9 +1504,7 @@
       "foundingLocation": "Erstein-Krafft",
       "slogan": "3 générations au service de votre toiture",
       "sameAs": [
-        "https://www.facebook.com/MalaiseCouverture",
-        "https://www.instagram.com/",
-        "https://www.linkedin.com/"
+        "https://www.facebook.com/MalaiseCouverture"
       ]
     }
   </script>
@@ -1546,7 +1594,7 @@
     <section class="container stats grid" aria-label="Chiffres clés">
       <article class="stat-card reveal"><strong><span class="counter" data-target="50">0</span></strong><span>Années d'expérience</span></article>
       <article class="stat-card reveal"><strong><span class="counter" data-target="3">0</span></strong><span>Générations</span></article>
-      <article class="stat-card reveal"><strong><span class="counter" data-target="100">0</span>%</strong><span>Engagement qualité</span></article>
+      <article class="stat-card reveal"><strong>Bas-Rhin</strong><span>Zone d'intervention</span></article>
       <article class="stat-card reveal"><strong><span class="counter" data-target="500">0</span>+</strong><span>Chantiers réalisés</span></article>
     </section>
 
@@ -1565,8 +1613,8 @@
         </div>
         <div class="story-media reveal" aria-label="Détail premium de toiture et évacuation d'eau">
           <div class="story-badge">
-            <strong>100%</strong>
-            <span>Engagement qualité, suivi clair et exigence de finition sur chaque chantier.</span>
+            <strong>1976</strong>
+            <span>Entreprise familiale, suivi clair et exigence de finition sur chaque chantier.</span>
           </div>
         </div>
       </div>
@@ -1676,8 +1724,9 @@
       <div class="container">
         <div class="gallery-head">
           <div class="reveal">
-            <p class="eyebrow">Galerie réalisations</p>
-            <h2>Une sélection de réalisations avant/après.</h2>
+            <p class="eyebrow">Réalisations</p>
+            <h2>Vos photos de chantiers, présentées proprement.</h2>
+            <p class="lead">Cette galerie est prête à recevoir vos vrais avant/après : toiture, zinguerie, étanchéité, isolation et inspection drone. Les emplacements ci-dessous servent de structure premium en attendant vos photos.</p>
           </div>
           <div class="filters reveal" aria-label="Filtrer les réalisations">
             <button class="filter active" data-filter="all">Tout</button>
@@ -1689,35 +1738,35 @@
           </div>
         </div>
         <div class="gallery-grid before-after-grid grid">
-          <article class="work-card ba-card reveal" data-cat="tuiles" data-detail="tuiles-renovation" tabindex="0" role="button" aria-label="Voir les détails de la réfection toiture tuiles" style="--before:url('https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=900');--after:url('https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=900')">
-            <div class="ba-stage"><div class="ba-side ba-before"></div><div class="ba-side ba-after"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
+          <article class="work-card ba-card reveal" data-cat="tuiles" data-detail="tuiles-renovation" tabindex="0" role="button" aria-label="Préparer les photos de réfection toiture tuiles">
+            <div class="ba-stage"><div class="ba-side ba-before" data-label="Photo avant à ajouter"></div><div class="ba-side ba-after" data-label="Photo après à ajouter"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
             <div class="ba-badges"><span>Avant</span><span>Après</span></div>
-            <div class="ba-info"><h3>Réfection toiture tuiles</h3><p>Remise à niveau complète de la couverture avec finitions propres.</p><div class="ba-tags"><span>Tuiles</span><span>Rénovation</span></div><button class="ba-detail" type="button">Voir 3 photos</button></div>
+            <div class="ba-info"><h3>Réfection toiture tuiles</h3><p>Emplacement pour un chantier réel avec photos avant, pendant et après.</p><div class="ba-tags"><span>Tuiles</span><span>Rénovation</span></div><button class="ba-detail" type="button">Voir les emplacements</button></div>
           </article>
-          <article class="work-card ba-card reveal" data-cat="zinguerie" data-detail="zinguerie-gouttieres" tabindex="0" role="button" aria-label="Voir les détails zinguerie et gouttières" style="--before:url('https://unsplash.com/photos/ZzZouwiQWV0/download?force=true');--after:url('https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=900')">
-            <div class="ba-stage"><div class="ba-side ba-before"></div><div class="ba-side ba-after"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
+          <article class="work-card ba-card reveal" data-cat="zinguerie" data-detail="zinguerie-gouttieres" tabindex="0" role="button" aria-label="Préparer les photos zinguerie et gouttières">
+            <div class="ba-stage"><div class="ba-side ba-before" data-label="Détail avant à ajouter"></div><div class="ba-side ba-after" data-label="Finition à ajouter"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
             <div class="ba-badges"><span>Avant</span><span>Après</span></div>
-            <div class="ba-info"><h3>Zinguerie et gouttières</h3><p>Remplacement des évacuations et reprise des détails zinc.</p><div class="ba-tags"><span>Zinc</span><span>Gouttières</span></div><button class="ba-detail" type="button">Voir 3 photos</button></div>
+            <div class="ba-info"><h3>Zinguerie et gouttières</h3><p>Emplacement pour montrer vos finitions zinc, chéneaux et évacuations.</p><div class="ba-tags"><span>Zinc</span><span>Gouttières</span></div><button class="ba-detail" type="button">Voir les emplacements</button></div>
           </article>
-          <article class="work-card ba-card reveal" data-cat="etancheite" data-detail="etancheite-toiture" tabindex="0" role="button" aria-label="Voir les détails étanchéité toiture" style="--before:url('https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=900');--after:url('https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=900')">
-            <div class="ba-stage"><div class="ba-side ba-before"></div><div class="ba-side ba-after"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
+          <article class="work-card ba-card reveal" data-cat="etancheite" data-detail="etancheite-toiture" tabindex="0" role="button" aria-label="Préparer les photos étanchéité toiture">
+            <div class="ba-stage"><div class="ba-side ba-before" data-label="Support à ajouter"></div><div class="ba-side ba-after" data-label="Étanchéité finie"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
             <div class="ba-badges"><span>Avant</span><span>Après</span></div>
-            <div class="ba-info"><h3>Étanchéité toiture</h3><p>Préparation, réparation et protection durable des zones sensibles.</p><div class="ba-tags"><span>Bitume</span><span>PVC</span></div><button class="ba-detail" type="button">Voir 3 photos</button></div>
+            <div class="ba-info"><h3>Étanchéité toiture</h3><p>Emplacement pour illustrer bitume, membrane PVC, réparations ou protection lourde.</p><div class="ba-tags"><span>Bitume</span><span>PVC</span></div><button class="ba-detail" type="button">Voir les emplacements</button></div>
           </article>
-          <article class="work-card ba-card reveal" data-cat="isolation" data-detail="isolation-toiture" tabindex="0" role="button" aria-label="Voir les détails isolation toiture" style="--before:url('https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=900');--after:url('https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=900')">
-            <div class="ba-stage"><div class="ba-side ba-before"></div><div class="ba-side ba-after"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
+          <article class="work-card ba-card reveal" data-cat="isolation" data-detail="isolation-toiture" tabindex="0" role="button" aria-label="Préparer les photos isolation toiture">
+            <div class="ba-stage"><div class="ba-side ba-before" data-label="Avant isolation"></div><div class="ba-side ba-after" data-label="Après travaux"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
             <div class="ba-badges"><span>Avant</span><span>Après</span></div>
-            <div class="ba-info"><h3>Isolation toiture</h3><p>Travaux d'isolation pour améliorer le confort thermique.</p><div class="ba-tags"><span>Toiture</span><span>Combles</span></div><button class="ba-detail" type="button">Voir 3 photos</button></div>
+            <div class="ba-info"><h3>Isolation toiture</h3><p>Emplacement pour valoriser un chantier toiture, combles ou sarking.</p><div class="ba-tags"><span>Toiture</span><span>Combles</span></div><button class="ba-detail" type="button">Voir les emplacements</button></div>
           </article>
-          <article class="work-card ba-card reveal" data-cat="drone" data-detail="inspection-drone" tabindex="0" role="button" aria-label="Voir les détails inspection drone" style="--before:url('https://images.pexels.com/photos/11748111/pexels-photo-11748111.jpeg?auto=compress&cs=tinysrgb&w=900');--after:url('https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=900')">
-            <div class="ba-stage"><div class="ba-side ba-before"></div><div class="ba-side ba-after"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
+          <article class="work-card ba-card reveal" data-cat="drone" data-detail="inspection-drone" tabindex="0" role="button" aria-label="Préparer les captures inspection drone">
+            <div class="ba-stage"><div class="ba-side ba-before" data-label="Vue drone à ajouter"></div><div class="ba-side ba-after" data-label="Zone repérée"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
             <div class="ba-badges"><span>Inspection</span><span>Diagnostic</span></div>
-            <div class="ba-info"><h3>Inspection drone</h3><p>Repérage visuel des défauts et préparation du devis.</p><div class="ba-tags"><span>Drone</span><span>HD</span></div><button class="ba-detail" type="button">Voir 3 photos</button></div>
+            <div class="ba-info"><h3>Inspection drone</h3><p>Emplacement pour montrer photos HD, défauts visibles et relevés drone.</p><div class="ba-tags"><span>Drone</span><span>HD</span></div><button class="ba-detail" type="button">Voir les emplacements</button></div>
           </article>
-          <article class="work-card ba-card reveal" data-cat="tuiles" data-detail="revision-couverture" tabindex="0" role="button" aria-label="Voir les détails révision couverture" style="--before:url('https://images.pexels.com/photos/11255234/pexels-photo-11255234.jpeg?auto=compress&cs=tinysrgb&w=900');--after:url('https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=900')">
-            <div class="ba-stage"><div class="ba-side ba-before"></div><div class="ba-side ba-after"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
+          <article class="work-card ba-card reveal" data-cat="tuiles" data-detail="revision-couverture" tabindex="0" role="button" aria-label="Préparer les photos révision couverture">
+            <div class="ba-stage"><div class="ba-side ba-before" data-label="Point faible"></div><div class="ba-side ba-after" data-label="Réparation finie"></div><div class="ba-divider"><span class="ba-handle">↔</span></div></div>
             <div class="ba-badges"><span>Avant</span><span>Après</span></div>
-            <div class="ba-info"><h3>Révision couverture</h3><p>Contrôle des points faibles et reprise des éléments abîmés.</p><div class="ba-tags"><span>Contrôle</span><span>Tuiles</span></div><button class="ba-detail" type="button">Voir 3 photos</button></div>
+            <div class="ba-info"><h3>Révision couverture</h3><p>Emplacement pour un chantier de contrôle, réparation ou reprise localisée.</p><div class="ba-tags"><span>Contrôle</span><span>Tuiles</span></div><button class="ba-detail" type="button">Voir les emplacements</button></div>
           </article>
         </div>
       </div>
@@ -1812,6 +1861,7 @@
           <div class="field full"><label for="project">Type de projet</label><select id="project" name="Type de projet"><option>Couverture</option><option>Zinguerie / toiture zinc</option><option>Étanchéité</option><option>Isolation toiture / combles</option><option>Entretien toiture / gouttières</option><option>Recherche de fuite</option><option>Inspection drone</option></select></div>
           <div class="field full"><label for="photos">Photos de votre toiture</label><input id="photos" type="file" name="Photos de votre toiture" accept="image/*" multiple><p class="field-note">Vous pouvez ajouter une ou plusieurs photos pour faciliter le premier diagnostic.</p></div>
           <div class="field full"><label for="message">Message</label><textarea id="message" name="Message" placeholder="Décrivez votre toiture, votre urgence ou votre projet."></textarea></div>
+          <p class="form-status full" id="quoteStatus" aria-live="polite"></p>
           <div class="field full"><button class="btn primary" type="submit">Demander mon devis</button></div>
         </form>
       </div>
@@ -1835,9 +1885,9 @@
     <section class="section light">
       <div class="container faq-grid">
         <div class="reveal">
-          <p class="eyebrow">FAQ SEO</p>
+          <p class="eyebrow">Questions fréquentes</p>
           <h2>Questions fréquentes toiture en Alsace.</h2>
-          <p>Des réponses utiles pour les recherches locales : couvreur Erstein, couvreur Bas-Rhin, zingueur Bas-Rhin et inspection toiture drone.</p>
+          <p>Des réponses simples pour comprendre notre zone d'intervention, les devis, les urgences toiture et l'inspection drone.</p>
         </div>
         <div class="faq-list">
           <article class="faq-item reveal open"><button class="faq-question">Le devis est-il gratuit ?<span>+</span></button><div class="faq-answer"><p>Oui, tous nos devis sont gratuits et sans engagement.</p></div></article>
@@ -1879,7 +1929,7 @@
         </div>
         <div>
           <h3>Navigation</h3>
-          <ul><li><a href="#accueil">Accueil</a></li><li><a href="#services">Services</a></li><li><a href="drone.html">Inspection drone</a></li><li><a href="configurateur-faconnage.html">Configurateur façonnage</a></li><li><a href="#realisations">Réalisations</a></li><li><a href="#contact">Contact</a></li><li><a href="#">Mentions légales</a></li></ul>
+          <ul><li><a href="#accueil">Accueil</a></li><li><a href="#services">Services</a></li><li><a href="drone.html">Inspection drone</a></li><li><a href="configurateur-faconnage.html">Configurateur façonnage</a></li><li><a href="#realisations">Réalisations</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:toiture@malaise.fr?subject=Mentions%20l%C3%A9gales%20du%20site">Mentions légales</a></li></ul>
         </div>
         <div>
           <h3>Coordonnées</h3>
@@ -1889,8 +1939,6 @@
           <h3>Réseaux</h3>
           <div class="socials">
             <a aria-label="Facebook" href="https://www.facebook.com/MalaiseCouverture" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-            <a aria-label="Instagram" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg></a>
-            <a aria-label="LinkedIn" href="#"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><path d="M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
           </div>
         </div>
       </div>
@@ -1966,13 +2014,47 @@
         field.classList.toggle('is-invalid', invalid);
         input.setAttribute('aria-invalid', String(invalid));
       };
-      quoteForm.addEventListener('submit', (event) => {
+      const status = document.querySelector('#quoteStatus');
+      const submitButton = quoteForm.querySelector('button[type="submit"]');
+      quoteForm.addEventListener('submit', async (event) => {
         quoteForm.classList.add('was-submitted');
         requiredFields.forEach(updateFieldState);
         const firstInvalid = quoteForm.querySelector('[required]:invalid');
         if (firstInvalid) {
           event.preventDefault();
+          if (status) {
+            status.textContent = 'Merci de remplir les champs obligatoires indiqués en rouge.';
+            status.className = 'form-status error';
+          }
           firstInvalid.focus();
+          return;
+        }
+        event.preventDefault();
+        if (status) {
+          status.textContent = 'Envoi de votre demande en cours...';
+          status.className = 'form-status';
+        }
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Envoi en cours...';
+        }
+        try {
+          const response = await fetch('/api/demande', { method: 'POST', body: new FormData(quoteForm) });
+          if (!response.ok) throw new Error('send-failed');
+          if (status) {
+            status.textContent = 'Votre demande a bien été envoyée. Nous vous recontactons rapidement.';
+            status.className = 'form-status success';
+          }
+          window.location.href = 'merci.html';
+        } catch (error) {
+          if (status) {
+            status.textContent = 'L’envoi automatique n’a pas abouti. Vous pouvez nous appeler ou envoyer votre demande par email avec vos photos.';
+            status.className = 'form-status error';
+          }
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Demander mon devis';
+          }
         }
       });
       requiredFields.forEach((input) => {
@@ -2000,56 +2082,56 @@
     const realisationDetails = {
       'tuiles-renovation': {
         title: 'Réfection toiture tuiles',
-        text: 'Exemple de chantier de couverture tuiles avec contrôle des points sensibles, reprise de la couverture et finitions propres.',
+        text: 'Ajoutez ici un vrai chantier de couverture tuiles : vue avant, étape de travaux et résultat final. Une courte description suffira pour rassurer le visiteur.',
         photos: [
-          ['Avant intervention', 'https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Pendant travaux', 'https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Finition toiture', 'https://images.pexels.com/photos/11255234/pexels-photo-11255234.jpeg?auto=compress&cs=tinysrgb&w=1200']
+          ['Photo avant à ajouter', ''],
+          ['Photo travaux à ajouter', ''],
+          ['Photo finition à ajouter', '']
         ]
       },
       'zinguerie-gouttieres': {
         title: 'Zinguerie et gouttières',
-        text: 'Détails zinc, gouttières, chéneaux et évacuations des eaux pluviales avec façonnage propre et durable.',
+        text: 'Ajoutez ici vos vrais détails zinc : gouttières, chéneaux, rives, noues ou façonnage sur mesure. Les finitions sont très importantes pour inspirer confiance.',
         photos: [
-          ['Détail zinc', 'https://unsplash.com/photos/ZzZouwiQWV0/download?force=true'],
-          ['Gouttière', 'https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Finition', 'https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=1200']
+          ['Détail zinc à ajouter', ''],
+          ['Gouttière ou chéneau à ajouter', ''],
+          ['Finition à ajouter', '']
         ]
       },
       'etancheite-toiture': {
         title: 'Étanchéité toiture',
-        text: 'Préparation, réparation et traitement des zones sensibles pour protéger durablement la toiture.',
+        text: 'Ajoutez ici un chantier réel d’étanchéité : support, mise en oeuvre et contrôle final. Précisez bitume, membrane PVC, réparation ou protection lourde.',
         photos: [
-          ['Support', 'https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Application', 'https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Contrôle', 'https://images.pexels.com/photos/11255234/pexels-photo-11255234.jpeg?auto=compress&cs=tinysrgb&w=1200']
+          ['Support à ajouter', ''],
+          ['Mise en oeuvre à ajouter', ''],
+          ['Contrôle final à ajouter', '']
         ]
       },
       'isolation-toiture': {
         title: 'Isolation toiture',
-        text: 'Travaux d’isolation toiture et combles pour améliorer le confort thermique et la performance du bâtiment.',
+        text: 'Ajoutez ici un chantier réel d’isolation toiture, combles ou sarking. Le visiteur doit voir le sérieux de la préparation et de la finition.',
         photos: [
-          ['Avant', 'https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Pose', 'https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Résultat', 'https://images.pexels.com/photos/11255234/pexels-photo-11255234.jpeg?auto=compress&cs=tinysrgb&w=1200']
+          ['Avant isolation à ajouter', ''],
+          ['Pose à ajouter', ''],
+          ['Résultat à ajouter', '']
         ]
       },
       'inspection-drone': {
         title: 'Inspection drone',
-        text: 'Inspection visuelle par drone pour repérer les défauts, les zones difficiles d’accès et préparer un devis précis.',
+        text: 'Ajoutez ici des captures réelles d’inspection drone : vue générale, détail repéré et résultat du relevé. C’est un excellent élément différenciant.',
         photos: [
-          ['Vue aérienne', 'https://images.pexels.com/photos/11748111/pexels-photo-11748111.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Point sensible', 'https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Diagnostic', 'https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=1200']
+          ['Vue drone à ajouter', ''],
+          ['Détail repéré à ajouter', ''],
+          ['Relevé à ajouter', '']
         ]
       },
       'revision-couverture': {
         title: 'Révision couverture',
-        text: 'Contrôle de la toiture, recherche de défauts visibles et reprise des éléments abîmés avant aggravation.',
+        text: 'Ajoutez ici un chantier réel de révision ou réparation : défaut visible, intervention et résultat. Ce format aide beaucoup les clients qui ont une fuite.',
         photos: [
-          ['Contrôle', 'https://images.pexels.com/photos/11255234/pexels-photo-11255234.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Réparation', 'https://images.pexels.com/photos/37623620/pexels-photo-37623620.jpeg?auto=compress&cs=tinysrgb&w=1200'],
-          ['Après intervention', 'https://images.pexels.com/photos/37623615/pexels-photo-37623615.jpeg?auto=compress&cs=tinysrgb&w=1200']
+          ['Défaut à ajouter', ''],
+          ['Réparation à ajouter', ''],
+          ['Après intervention à ajouter', '']
         ]
       }
     };
@@ -2065,9 +2147,11 @@
       if (!detail) return;
       modalTitle.textContent = detail.title;
       modalText.textContent = detail.text;
-      modalGallery.innerHTML = detail.photos.map(([label, url]) => (
-        `<div class="detail-photo" style="--photo:url('${url}')"><span>${label}</span></div>`
-      )).join('');
+      modalGallery.innerHTML = detail.photos.map(([label, url]) => {
+        const style = url ? ` style="--photo:url('${url}')"` : '';
+        const empty = url ? '' : ' empty';
+        return `<div class="detail-photo${empty}"${style}><span>${label}</span></div>`;
+      }).join('');
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
